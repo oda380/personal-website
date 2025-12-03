@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import NextImage from 'next/image';
 import { usePathname } from 'next/navigation';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
@@ -12,8 +13,14 @@ export default function Navigation() {
     return (
         <nav className="sticky top-0 z-40 w-full border-b border-[hsl(var(--border))] bg-[hsl(var(--card))]/80 backdrop-blur-sm">
             <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-                <Link href="/" className="font-bold text-xl tracking-tight hover:text-[hsl(var(--primary))] transition-colors z-50 relative">
-                    KL
+                <Link href="/" className="hover:opacity-80 transition-opacity z-50 relative">
+                    <NextImage
+                        src="/logo.png"
+                        alt="Logo"
+                        width={32}
+                        height={32}
+                        className="rounded-lg"
+                    />
                 </Link>
 
                 {/* Desktop Navigation */}
@@ -53,7 +60,7 @@ export default function Navigation() {
 
                 {/* Mobile Menu Button */}
                 <button
-                    className="md:hidden z-50 relative p-2 -mr-2 text-[hsl(var(--foreground))]"
+                    className="md:hidden z-[110] relative p-2 -mr-2 text-[hsl(var(--foreground))]"
                     onClick={() => setIsOpen(!isOpen)}
                     aria-label="Toggle menu"
                 >
@@ -70,24 +77,31 @@ export default function Navigation() {
 
                 {/* Mobile Menu Overlay */}
                 {isOpen && (
-                    <div className="fixed inset-0 bg-[hsl(var(--background))] z-40 flex flex-col items-center justify-center gap-8 md:hidden animate-in fade-in slide-in-from-top-5 duration-200">
+                    <div className="fixed inset-0 bg-[hsl(var(--background))] z-[100] flex flex-col items-center justify-center gap-8 md:hidden animate-in fade-in slide-in-from-top-5 duration-200">
+                        <Link
+                            href="/"
+                            className="text-2xl font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            Home
+                        </Link>
                         <Link
                             href="/projects"
-                            className="text-2xl font-medium hover:text-[hsl(var(--primary))] transition-colors"
+                            className="text-2xl font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors"
                             onClick={() => setIsOpen(false)}
                         >
                             Projects
                         </Link>
                         <Link
                             href="/writing"
-                            className="text-2xl font-medium hover:text-[hsl(var(--primary))] transition-colors"
+                            className="text-2xl font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors"
                             onClick={() => setIsOpen(false)}
                         >
                             Writing
                         </Link>
                         <Link
                             href="/about"
-                            className="text-2xl font-medium hover:text-[hsl(var(--primary))] transition-colors"
+                            className="text-2xl font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors"
                             onClick={() => setIsOpen(false)}
                         >
                             About
@@ -98,7 +112,7 @@ export default function Navigation() {
                         <SignedOut>
                             <SignInButton mode="modal">
                                 <button
-                                    className="text-xl font-medium hover:text-[hsl(var(--primary))] transition-colors"
+                                    className="text-xl font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors"
                                     onClick={() => setIsOpen(false)}
                                 >
                                     Admin Sign In
@@ -109,7 +123,7 @@ export default function Navigation() {
                         <SignedIn>
                             <Link
                                 href="/admin"
-                                className="text-xl font-medium hover:text-[hsl(var(--primary))] transition-colors"
+                                className="text-xl font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors"
                                 onClick={() => setIsOpen(false)}
                             >
                                 Dashboard

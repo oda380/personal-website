@@ -12,9 +12,17 @@ export async function getProjects(): Promise<Project[]> {
   `;
 
     return rows.map(row => ({
-        ...row,
+        id: row.id,
+        title: row.title,
+        slug: row.slug,
+        oneLiner: row.one_liner,
+        role: row.role,
+        timeframe: row.timeframe,
         stack: row.stack as string[],
+        summary: row.summary,
         highlights: row.highlights as string[],
+        link: row.link,
+        type: row.type,
     })) as Project[];
 }
 
@@ -46,9 +54,17 @@ export async function getProjectById(id: number): Promise<Project | null> {
 
     const row = rows[0];
     return {
-        ...row,
+        id: row.id,
+        title: row.title,
+        slug: row.slug,
+        oneLiner: row.one_liner,
+        role: row.role,
+        timeframe: row.timeframe,
         stack: row.stack as string[],
+        summary: row.summary,
         highlights: row.highlights as string[],
+        link: row.link,
+        type: row.type,
     } as Project;
 }
 
