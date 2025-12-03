@@ -1,14 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-
-interface Post {
-    id: number;
-    title: string;
-    one_liner: string;
-    status: string;
-    last_updated: string;
-}
+import { Post } from '@/lib/types';
 
 export default function PostsTable({ posts }: { posts: Post[] }) {
     const handleDelete = async (id: number, title: string) => {
@@ -43,20 +36,20 @@ export default function PostsTable({ posts }: { posts: Post[] }) {
                             <td className="p-4">
                                 <div>
                                     <p className="font-medium">{post.title}</p>
-                                    <p className="text-sm text-[hsl(var(--muted-foreground))]">{post.one_liner}</p>
+                                    <p className="text-sm text-[hsl(var(--muted-foreground))]">{post.oneLiner}</p>
                                 </div>
                             </td>
                             <td className="p-4">
                                 <span className={`text-xs px-2 py-1 rounded-full ${post.status === 'published'
-                                        ? 'bg-emerald-500/10 text-emerald-500'
-                                        : post.status === 'draft'
-                                            ? 'bg-amber-500/10 text-amber-500'
-                                            : 'bg-gray-500/10 text-gray-500'
+                                    ? 'bg-emerald-500/10 text-emerald-500'
+                                    : post.status === 'draft'
+                                        ? 'bg-amber-500/10 text-amber-500'
+                                        : 'bg-gray-500/10 text-gray-500'
                                     }`}>
                                     {post.status}
                                 </span>
                             </td>
-                            <td className="p-4 text-[hsl(var(--muted-foreground))]">{post.last_updated}</td>
+                            <td className="p-4 text-[hsl(var(--muted-foreground))]">{post.lastUpdated}</td>
                             <td className="p-4 text-right space-x-2">
                                 <Link
                                     href={`/admin/posts/${post.id}/edit`}
@@ -65,7 +58,7 @@ export default function PostsTable({ posts }: { posts: Post[] }) {
                                     Edit
                                 </Link>
                                 <button
-                                    onClick={() => handleDelete(post.id, post.title)}
+                                    onClick={() => handleDelete(post.id!, post.title)}
                                     className="text-sm text-red-500 hover:underline"
                                 >
                                     Delete

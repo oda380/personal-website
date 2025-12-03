@@ -1,14 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-
-interface Project {
-    id: number;
-    title: string;
-    one_liner: string;
-    type: string;
-    timeframe: string;
-}
+import { Project } from '@/lib/types';
 
 export default function ProjectsTable({ projects }: { projects: Project[] }) {
     const handleDelete = async (id: number, title: string) => {
@@ -43,7 +36,7 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
                             <td className="p-4">
                                 <div>
                                     <p className="font-medium">{project.title}</p>
-                                    <p className="text-sm text-[hsl(var(--muted-foreground))]">{project.one_liner}</p>
+                                    <p className="text-sm text-[hsl(var(--muted-foreground))]">{project.oneLiner}</p>
                                 </div>
                             </td>
                             <td className="p-4">
@@ -60,7 +53,7 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
                                     Edit
                                 </Link>
                                 <button
-                                    onClick={() => handleDelete(project.id, project.title)}
+                                    onClick={() => handleDelete(project.id!, project.title)}
                                     className="text-sm text-red-500 hover:underline"
                                 >
                                     Delete
