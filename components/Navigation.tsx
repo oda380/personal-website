@@ -12,6 +12,11 @@ import { ThemeToggle } from './ThemeToggle';
 export default function Navigation() {
     const pathname = usePathname();
     const [isOpen, setIsOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // Lock body scroll when menu is open
     useEffect(() => {
@@ -137,84 +142,86 @@ export default function Navigation() {
                 </button>
 
                 {/* Mobile Menu Overlay */}
-                <AnimatePresence>
-                    {isOpen && createPortal(
-                        <motion.div
-                            initial="closed"
-                            animate="open"
-                            exit="closed"
-                            variants={menuVariants}
-                            className="fixed inset-0 z-[100] flex flex-col md:hidden mobile-menu-overlay"
-                        >
-                            <div className="flex flex-col justify-center flex-1 px-8 gap-8">
-                                {links.map((link, i) => (
+                {mounted && createPortal(
+                    <AnimatePresence>
+                        {isOpen && (
+                            <motion.div
+                                initial="closed"
+                                animate="open"
+                                exit="closed"
+                                variants={menuVariants}
+                                className="fixed inset-0 z-[100] flex flex-col md:hidden mobile-menu-overlay"
+                            >
+                                <div className="flex flex-col justify-center flex-1 px-8 gap-8">
+                                    {links.map((link, i) => (
+                                        <motion.div
+                                            key={link.href}
+                                            custom={i}
+                                            variants={linkVariants}
+                                        >
+                                            <Link
+                                                href={link.href}
+                                                className="text-4xl font-bold tracking-tight text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors block"
+                                                onClick={() => setIsOpen(false)}
+                                            >
+                                                {link.label}
+                                            </Link>
+                                        </motion.div>
+                                    ))}
+
                                     <motion.div
-                                        key={link.href}
-                                        custom={i}
+                                        custom={links.length}
+                                        variants={linkVariants}
+                                        className="h-px w-16 bg-[hsl(var(--border))] my-4"
+                                    />
+
+                                    <motion.div
+                                        custom={links.length + 1}
                                         variants={linkVariants}
                                     >
-                                        <Link
-                                            href={link.href}
-                                            className="text-4xl font-bold tracking-tight text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors block"
-                                            onClick={() => setIsOpen(false)}
-                                        >
-                                            {link.label}
-                                        </Link>
-                                    </motion.div>
-                                ))}
+                                        <SignedOut>
+                                            <SignInButton mode="modal">
+                                                <button
+                                                    className="text-xl font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+                                                    onClick={() => setIsOpen(false)}
+                                                >
+                                                    Admin Sign In
+                                                </button>
+                                            </SignInButton>
+                                        </SignedOut>
 
-                                <motion.div
-                                    custom={links.length}
-                                    variants={linkVariants}
-                                    className="h-px w-16 bg-[hsl(var(--border))] my-4"
-                                />
-
-                                <motion.div
-                                    custom={links.length + 1}
-                                    variants={linkVariants}
-                                >
-                                    <SignedOut>
-                                        <SignInButton mode="modal">
-                                            <button
-                                                className="text-xl font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
-                                                onClick={() => setIsOpen(false)}
-                                            >
-                                                Admin Sign In
-                                            </button>
-                                        </SignInButton>
-                                    </SignedOut>
-
-                                    <SignedIn>
-                                        <div className="flex flex-col gap-6">
-                                            <Link
-                                                href="/admin"
-                                                className="text-xl font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
-                                                onClick={() => setIsOpen(false)}
-                                            >
-                                                Dashboard
-                                            </Link>
-                                            <div className="scale-125 origin-left">
-                                                <UserButton afterSignOutUrl="/" />
+                                        <SignedIn>
+                                            <div className="flex flex-col gap-6">
+                                                <Link
+                                                    href="/admin"
+                                                    className="text-xl font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+                                                    onClick={() => setIsOpen(false)}
+                                                >
+                                                    Dashboard
+                                                </Link>
+                                                <div className="scale-125 origin-left">
+                                                    <UserButton afterSignOutUrl="/" />
+                                                </div>
                                             </div>
-                                        </div>
-                                    </SignedIn>
-                                </motion.div>
-                            </div>
+                                        </SignedIn>
+                                    </motion.div>
+                                </div>
 
-                            {/* Footer decoration */}
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.5 }}
-                                className="p-8 flex items-center justify-between text-[hsl(var(--muted-foreground))] text-sm"
-                            >
-                                <span>© {new Date().getFullYear()} Kitaek Lim</span>
-                                <ThemeToggle />
+                                {/* Footer decoration */}
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.5 }}
+                                    className="p-8 flex items-center justify-between text-[hsl(var(--muted-foreground))] text-sm"
+                                >
+                                    <span>© {new Date().getFullYear()} Kitaek Lim</span>
+                                    <ThemeToggle />
+                                </motion.div>
                             </motion.div>
-                        </motion.div>,
-                        document.body
-                    )}
-                </AnimatePresence>
+                        )}
+                    </AnimatePresence>,
+                    document.body
+                )}
             </div>
         </nav>
     );
