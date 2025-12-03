@@ -1,18 +1,70 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import NextImage from 'next/image';
 import { usePathname } from 'next/navigation';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 
 export default function Navigation() {
     const pathname = usePathname();
     const [isOpen, setIsOpen] = useState(false);
 
+    // Lock body scroll when menu is open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
+
+    const menuVariants: Variants = {
+        closed: {
+            opacity: 0,
+            y: "-100%",
+            transition: {
+                duration: 0.5,
+                ease: [0.22, 1, 0.36, 1]
+            }
+        },
+        open: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.5,
+                ease: [0.22, 1, 0.36, 1]
+            }
+        }
+    };
+
+    const linkVariants: Variants = {
+        closed: { opacity: 0, y: 20 },
+        open: (i: number) => ({
+            opacity: 1,
+            y: 0,
+            transition: {
+                delay: 0.1 + i * 0.1,
+                duration: 0.4,
+                ease: "easeOut"
+            }
+        })
+    };
+
+    const links = [
+        { href: "/", label: "Home" },
+        { href: "/projects", label: "Projects" },
+        { href: "/writing", label: "Writing" },
+        { href: "/about", label: "About" },
+    ];
+
     return (
-        <nav className="sticky top-0 z-40 w-full border-b border-[hsl(var(--border))] bg-[hsl(var(--card))]/80 backdrop-blur-sm">
-            <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+        <nav className="sticky top-0 z-40 w-full border-b border-[hsl(var(--border))] bg-[hsl(var(--background))]/80 backdrop-blur-md">
+            <div className="max-w-5xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
                 <Link href="/" className="hover:opacity-80 transition-opacity z-50 relative">
                     <NextImage
                         src="/logo.png"
@@ -24,21 +76,22 @@ export default function Navigation() {
                 </Link>
 
                 {/* Desktop Navigation */}
-                <div className="hidden md:flex items-center gap-6">
-                    <Link href="/projects" className="text-sm font-medium hover:text-[hsl(var(--primary))] transition-colors">
-                        Projects
-                    </Link>
-                    <Link href="/writing" className="text-sm font-medium hover:text-[hsl(var(--primary))] transition-colors">
-                        Writing
-                    </Link>
-                    <Link href="/about" className="text-sm font-medium hover:text-[hsl(var(--primary))] transition-colors">
-                        About
-                    </Link>
+                <div className="hidden md:flex items-center gap-8">
+                    {links.slice(1).map(link => (
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            className={`text-sm font-medium transition-colors hover:text-[hsl(var(--primary))] ${pathname === link.href ? 'text-[hsl(var(--primary))]' : 'text-[hsl(var(--muted-foreground))]'
+                                }`}
+                        >
+                            {link.label}
+                        </Link>
+                    ))}
 
-                    <div className="pl-2 border-l border-[hsl(var(--border))] flex items-center">
+                    <div className="pl-4 border-l border-[hsl(var(--border))] flex items-center">
                         <SignedOut>
                             <SignInButton mode="modal">
-                                <button className="text-sm font-medium hover:text-[hsl(var(--primary))] transition-colors">
+                                <button className="text-sm font-medium hover:text-[hsl(var(--primary))] transition-colors text-[hsl(var(--muted-foreground))]">
                                     Admin
                                 </button>
                             </SignInButton>
@@ -48,7 +101,7 @@ export default function Navigation() {
                             <div className="flex items-center gap-4">
                                 <Link
                                     href="/admin"
-                                    className="text-sm font-medium hover:text-[hsl(var(--primary))] transition-colors"
+                                    className="text-sm font-medium hover:text-[hsl(var(--primary))] transition-colors text-[hsl(var(--muted-foreground))]"
                                 >
                                     Dashboard
                                 </Link>
@@ -64,76 +117,99 @@ export default function Navigation() {
                     onClick={() => setIsOpen(!isOpen)}
                     aria-label="Toggle menu"
                 >
-                    {isOpen ? (
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    ) : (
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    )}
+                    <div className="w-6 h-6 flex flex-col justify-center gap-1.5">
+                        <motion.span
+                            animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                            className="w-full h-0.5 bg-current block origin-center transition-transform"
+                        />
+                        <motion.span
+                            animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
+                            className="w-full h-0.5 bg-current block transition-opacity"
+                        />
+                        <motion.span
+                            animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                            className="w-full h-0.5 bg-current block origin-center transition-transform"
+                        />
+                    </div>
                 </button>
 
                 {/* Mobile Menu Overlay */}
-                {isOpen && (
-                    <div className="fixed inset-0 bg-[hsl(var(--background))] z-[100] flex flex-col items-center justify-center gap-8 md:hidden animate-in fade-in slide-in-from-top-5 duration-200">
-                        <Link
-                            href="/"
-                            className="text-2xl font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors"
-                            onClick={() => setIsOpen(false)}
+                <AnimatePresence>
+                    {isOpen && (
+                        <motion.div
+                            initial="closed"
+                            animate="open"
+                            exit="closed"
+                            variants={menuVariants}
+                            className="fixed inset-0 bg-[hsl(var(--background))] z-[100] flex flex-col md:hidden"
                         >
-                            Home
-                        </Link>
-                        <Link
-                            href="/projects"
-                            className="text-2xl font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            Projects
-                        </Link>
-                        <Link
-                            href="/writing"
-                            className="text-2xl font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            Writing
-                        </Link>
-                        <Link
-                            href="/about"
-                            className="text-2xl font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            About
-                        </Link>
+                            <div className="flex flex-col justify-center flex-1 px-8 gap-8">
+                                {links.map((link, i) => (
+                                    <motion.div
+                                        key={link.href}
+                                        custom={i}
+                                        variants={linkVariants}
+                                    >
+                                        <Link
+                                            href={link.href}
+                                            className="text-4xl font-bold tracking-tight text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors block"
+                                            onClick={() => setIsOpen(false)}
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    </motion.div>
+                                ))}
 
-                        <div className="w-16 h-px bg-[hsl(var(--border))]" />
+                                <motion.div
+                                    custom={links.length}
+                                    variants={linkVariants}
+                                    className="h-px w-16 bg-[hsl(var(--border))] my-4"
+                                />
 
-                        <SignedOut>
-                            <SignInButton mode="modal">
-                                <button
-                                    className="text-xl font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors"
-                                    onClick={() => setIsOpen(false)}
+                                <motion.div
+                                    custom={links.length + 1}
+                                    variants={linkVariants}
                                 >
-                                    Admin Sign In
-                                </button>
-                            </SignInButton>
-                        </SignedOut>
+                                    <SignedOut>
+                                        <SignInButton mode="modal">
+                                            <button
+                                                className="text-xl font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+                                                onClick={() => setIsOpen(false)}
+                                            >
+                                                Admin Sign In
+                                            </button>
+                                        </SignInButton>
+                                    </SignedOut>
 
-                        <SignedIn>
-                            <Link
-                                href="/admin"
-                                className="text-xl font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                Dashboard
-                            </Link>
-                            <div className="scale-125">
-                                <UserButton afterSignOutUrl="/" />
+                                    <SignedIn>
+                                        <div className="flex flex-col gap-6">
+                                            <Link
+                                                href="/admin"
+                                                className="text-xl font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+                                                onClick={() => setIsOpen(false)}
+                                            >
+                                                Dashboard
+                                            </Link>
+                                            <div className="scale-125 origin-left">
+                                                <UserButton afterSignOutUrl="/" />
+                                            </div>
+                                        </div>
+                                    </SignedIn>
+                                </motion.div>
                             </div>
-                        </SignedIn>
-                    </div>
-                )}
+
+                            {/* Footer decoration */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.5 }}
+                                className="p-8 text-[hsl(var(--muted-foreground))] text-sm"
+                            >
+                                © {new Date().getFullYear()} Kitaek Lim
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </nav>
     );
