@@ -143,8 +143,7 @@ export default function Navigation() {
                             animate="open"
                             exit="closed"
                             variants={menuVariants}
-                            className="fixed inset-0 z-[100] flex flex-col md:hidden"
-                            style={{ backgroundColor: 'hsl(var(--background))' }}
+                            className="fixed inset-0 z-[100] flex flex-col md:hidden mobile-menu-overlay"
                         >
                             <div className="flex flex-col justify-center flex-1 px-8 gap-8">
                                 {links.map((link, i) => (
