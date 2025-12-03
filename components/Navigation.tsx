@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import NextImage from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -137,7 +138,7 @@ export default function Navigation() {
 
                 {/* Mobile Menu Overlay */}
                 <AnimatePresence>
-                    {isOpen && (
+                    {isOpen && createPortal(
                         <motion.div
                             initial="closed"
                             animate="open"
@@ -210,7 +211,8 @@ export default function Navigation() {
                                 <span>© {new Date().getFullYear()} Kitaek Lim</span>
                                 <ThemeToggle />
                             </motion.div>
-                        </motion.div>
+                        </motion.div>,
+                        document.body
                     )}
                 </AnimatePresence>
             </div>
