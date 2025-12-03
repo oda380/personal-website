@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { SignedIn, SignedOut } from '@clerk/nextjs';
 import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { motion } from 'framer-motion';
 
 interface Settings {
     about_content: string;
@@ -119,10 +120,34 @@ export default function AboutPage() {
                             )}
                         </div>
 
+
                         <div className="space-y-4">
                             <div>
-                                <h1 className="text-3xl font-bold tracking-tight">Kitaek Lim</h1>
-                                <p className="text-lg text-[hsl(var(--muted-foreground))]">Product Builder & Web3 Enthusiast</p>
+                                <motion.h1
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                    className="text-3xl font-bold tracking-tight mb-2"
+                                >
+                                    Kitaek Lim
+                                </motion.h1>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.2, duration: 0.5 }}
+                                    className="text-lg text-[hsl(var(--muted-foreground))]"
+                                >
+                                    <span className="relative inline-block">
+                                        Product Builder
+                                        <motion.span
+                                            initial={{ width: 0 }}
+                                            animate={{ width: '100%' }}
+                                            transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+                                            className="absolute bottom-1 left-0 h-2 bg-[hsl(var(--primary))]/20 -z-10 -rotate-1"
+                                        />
+                                    </span>
+                                    {' '}& Web3 Enthusiast
+                                </motion.div>
                             </div>
 
                             <div className="flex flex-wrap gap-3">

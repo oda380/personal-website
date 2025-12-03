@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { Post } from '@/lib/types';
+import { Button } from '@/components/ui/Button';
+import { Pencil, Trash2 } from 'lucide-react';
 
 export default function PostsTable({ posts }: { posts: Post[] }) {
     const handleDelete = async (id: number, title: string) => {
@@ -52,19 +54,24 @@ export default function PostsTable({ posts }: { posts: Post[] }) {
                                 </span>
                             </td>
                             <td className="p-4 text-[hsl(var(--muted-foreground))]">{post.lastUpdated}</td>
-                            <td className="p-4 text-right space-x-2">
-                                <Link
-                                    href={`/admin/posts/${post.id}/edit`}
-                                    className="text-sm text-[hsl(var(--primary))] hover:underline"
-                                >
-                                    Edit
-                                </Link>
-                                <button
-                                    onClick={() => handleDelete(post.id!, post.title)}
-                                    className="text-sm text-red-500 hover:underline"
-                                >
-                                    Delete
-                                </button>
+                            <td className="p-4 text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                    <Link href={`/admin/posts/${post.id}/edit`}>
+                                        <Button variant="outline" size="sm" className="gap-2">
+                                            <Pencil className="w-4 h-4" />
+                                            Edit
+                                        </Button>
+                                    </Link>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => handleDelete(post.id!, post.title)}
+                                        className="gap-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 border-red-200 dark:border-red-900/30"
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                        Delete
+                                    </Button>
+                                </div>
                             </td>
                         </tr>
                     ))}

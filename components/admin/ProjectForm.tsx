@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
@@ -17,6 +17,7 @@ const projectSchema = z.object({
     highlights: z.array(z.object({ value: z.string() })).min(1, 'At least one highlight required'),
     link: z.string().optional(),
     type: z.enum(['web3', 'web2', 'mobile', 'other']),
+    displayOrder: z.number(),
 });
 
 type ProjectFormData = z.infer<typeof projectSchema>;
@@ -30,17 +31,28 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const defaultValues: Partial<ProjectFormData> = project ? {
+        ...project,
+        stack: project.stack?.map((v: string) => ({ value: v })) || [{ value: '' }],
+        highlights: project.highlights?.map((v: string) => ({ value: v })) || [{ value: '' }],
+        displayOrder: project.displayOrder || 0,
+    } : {
+        title: '',
+        slug: '',
+        oneLiner: '',
+        role: '',
+        timeframe: '',
+        stack: [{ value: '' }],
+        summary: '',
+        highlights: [{ value: '' }],
+        link: '',
+        type: 'web3',
+        displayOrder: 0,
+    };
+
     const { register, control, handleSubmit, formState: { errors } } = useForm<ProjectFormData>({
         resolver: zodResolver(projectSchema),
-        defaultValues: project ? {
-            ...project,
-            stack: project.stack?.map((v: string) => ({ value: v })) || [{ value: '' }],
-            highlights: project.highlights?.map((v: string) => ({ value: v })) || [{ value: '' }],
-        } : {
-            stack: [{ value: '' }],
-            highlights: [{ value: '' }],
-            type: 'web3',
-        },
+        defaultValues,
     });
 
     const { fields: stackFields, append: appendStack, remove: removeStack } = useFieldArray({
@@ -53,7 +65,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
         name: 'highlights',
     });
 
-    const onSubmit = async (data: ProjectFormData) => {
+    const onSubmit: SubmitHandler<ProjectFormData> = async (data) => {
         setIsSubmitting(true);
 
         const payload = {
@@ -203,17 +215,8 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
                 {errors.highlights && <p className="text-red-500 text-sm mt-1">{errors.highlights.message}</p>}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-                <div>
-                    <label className="block text-sm font-medium mb-2">Link (Optional)</label>
-                    <input
-                        {...register('link')}
-                        placeholder="https://github.com/..."
-                        className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
-                    />
-                </div>
-
-                <div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="md:col-span-1">
                     <label className="block text-sm font-medium mb-2">Type</label>
                     <select
                         {...register('type')}
@@ -224,6 +227,25 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
                         <option value="mobile">Mobile</option>
                         <option value="other">Other</option>
                     </select>
+                </div>
+
+                <div className="md:col-span-1">
+                    <label className="block text-sm font-medium mb-2">Display Order</label>
+                    <input
+                        type="number"
+                        {...register('displayOrder', { valueAsNumber: true })}
+                        className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    />
+                    <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">Lower numbers appear first</p>
+                </div>
+
+                <div className="md:col-span-1">
+                    <label className="block text-sm font-medium mb-2">Link (Optional)</label>
+                    <input
+                        {...register('link')}
+                        placeholder="https://github.com/..."
+                        className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    />
                 </div>
             </div>
 

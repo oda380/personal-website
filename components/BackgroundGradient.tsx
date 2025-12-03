@@ -1,17 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
 
 export default function BackgroundGradient() {
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    if (!mounted) return null;
-
     return (
         <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
             <motion.div
@@ -26,7 +17,7 @@ export default function BackgroundGradient() {
                     repeat: Infinity,
                     ease: "linear"
                 }}
-                className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[hsl(var(--primary))] blur-[100px] opacity-30"
+                className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[hsl(var(--primary))] blur-[100px] opacity-30 will-change-transform transform-gpu"
             />
             <motion.div
                 animate={{
@@ -41,7 +32,7 @@ export default function BackgroundGradient() {
                     ease: "linear",
                     delay: 2
                 }}
-                className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-blue-500 blur-[120px] opacity-20"
+                className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-blue-500 blur-[120px] opacity-20 will-change-transform transform-gpu"
             />
         </div>
     );

@@ -8,7 +8,7 @@ import { Project, Post } from './types';
 export async function getProjects(): Promise<Project[]> {
     const { rows } = await sql`
     SELECT * FROM projects 
-    ORDER BY created_at DESC
+    ORDER BY display_order ASC, created_at DESC
   `;
 
     return rows.map(row => ({
@@ -23,6 +23,7 @@ export async function getProjects(): Promise<Project[]> {
         highlights: row.highlights as string[],
         link: row.link,
         type: row.type,
+        displayOrder: row.display_order,
     })) as Project[];
 }
 
@@ -40,6 +41,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
         ...row,
         stack: row.stack as string[],
         highlights: row.highlights as string[],
+        displayOrder: row.display_order,
     } as Project;
 }
 
@@ -65,6 +67,7 @@ export async function getProjectById(id: number): Promise<Project | null> {
         highlights: row.highlights as string[],
         link: row.link,
         type: row.type,
+        displayOrder: row.display_order,
     } as Project;
 }
 
@@ -72,7 +75,7 @@ export async function createProject(project: Omit<Project, 'id'>): Promise<Proje
     const { rows } = await sql`
     INSERT INTO projects (
       title, slug, one_liner, role, timeframe, 
-      stack, summary, highlights, link, type
+      stack, summary, highlights, link, type, display_order
     )
     VALUES (
       ${project.title}, 
@@ -84,7 +87,8 @@ export async function createProject(project: Omit<Project, 'id'>): Promise<Proje
       ${project.summary},
       ${JSON.stringify(project.highlights)}::jsonb,
       ${project.link || null},
-      ${project.type}
+      ${project.type},
+      ${project.displayOrder || 0}
     )
     RETURNING *
   `;
@@ -94,6 +98,7 @@ export async function createProject(project: Omit<Project, 'id'>): Promise<Proje
         ...row,
         stack: row.stack as string[],
         highlights: row.highlights as string[],
+        displayOrder: row.display_order,
     } as Project;
 }
 
@@ -142,6 +147,10 @@ export async function updateProject(id: number, project: Partial<Omit<Project, '
         updates.push(`type = $${paramIndex++}`);
         values.push(project.type);
     }
+    if (project.displayOrder !== undefined) {
+        updates.push(`display_order = $${paramIndex++}`);
+        values.push(project.displayOrder);
+    }
 
     updates.push(`updated_at = NOW()`);
     values.push(id);
@@ -160,6 +169,7 @@ export async function updateProject(id: number, project: Partial<Omit<Project, '
         ...row,
         stack: row.stack as string[],
         highlights: row.highlights as string[],
+        displayOrder: row.display_order,
     } as Project;
 }
 

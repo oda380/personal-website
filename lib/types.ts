@@ -28,6 +28,7 @@ export interface Project {
   highlights: string[];
   link?: string; // GitHub, live site, or whatever URL showcases the project best
   type: 'web3' | 'web2' | 'mobile' | 'other';
+  displayOrder?: number;
 }
 
 export interface Post {
@@ -40,3 +41,11 @@ export interface Post {
   lastUpdated: string;
   keyIdea: string;
 }
+
+export interface Infographic {
+  id?: number;
+  datePosted: string;
+  imageUrl: string;
+  pinataCid?: string;
+}
+

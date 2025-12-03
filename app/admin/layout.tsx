@@ -33,6 +33,12 @@ export default function AdminLayout({
                             Posts
                         </Link>
                         <Link
+                            href="/admin/infographics"
+                            className="block px-4 py-2 rounded-lg hover:bg-[hsl(var(--muted))] transition-colors"
+                        >
+                            Daily Crypto
+                        </Link>
+                        <Link
                             href="/admin/settings"
                             className="block px-4 py-2 rounded-lg hover:bg-[hsl(var(--muted))] transition-colors"
                         >

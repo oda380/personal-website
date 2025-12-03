@@ -67,6 +67,7 @@ export default function Navigation() {
         { href: "/", label: "Home" },
         { href: "/projects", label: "Projects" },
         { href: "/writing", label: "Writing" },
+        { href: '/daily-crypto', label: 'Daily Crypto' },
         { href: "/about", label: "About" },
     ];
 

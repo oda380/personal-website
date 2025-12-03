@@ -2,7 +2,9 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { Button } from '@/components/ui/Button';
+import { Pencil, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface Project {
     id: number;
@@ -12,59 +14,43 @@ interface Project {
 
 export default function AdminProjectActions({ project }: { project: Project }) {
     const router = useRouter();
-    const [isConfirming, setIsConfirming] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
 
     const handleDelete = async () => {
-        setIsDeleting(true);
+        if (!confirm(`Are you sure you want to delete "${project.title}"?`)) {
+            return;
+        }
+
         try {
             const res = await fetch(`/api/projects/${project.id}`, { method: 'DELETE' });
             if (res.ok) {
+                toast.success('Project deleted successfully');
                 router.refresh();
             } else {
-                alert('Failed to delete project');
-                setIsDeleting(false);
+                toast.error('Failed to delete project');
             }
         } catch (error) {
-            alert('Error deleting project');
-            setIsDeleting(false);
+            console.error('Delete error:', error);
+            toast.error('Error deleting project');
         }
     };
 
     return (
-        <div className="flex gap-2 mt-4 pt-4 border-t border-[hsl(var(--border))]">
-            <Link
-                href={`/admin/projects/${project.id}/edit`}
-                className="px-3 py-1.5 text-sm bg-[hsl(var(--primary))] text-white rounded-md hover:bg-[hsl(var(--primary))]/90 transition-colors"
-            >
-                Edit
+        <div className="flex gap-2 mt-4 pt-4 border-t border-[hsl(var(--border))] justify-end">
+            <Link href={`/admin/projects/${project.id}/edit`}>
+                <Button variant="outline" size="sm" className="gap-2">
+                    <Pencil className="w-4 h-4" />
+                    Edit
+                </Button>
             </Link>
-
-            {!isConfirming ? (
-                <button
-                    onClick={() => setIsConfirming(true)}
-                    className="px-3 py-1.5 text-sm bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
-                >
-                    Delete
-                </button>
-            ) : (
-                <div className="flex gap-2">
-                    <button
-                        onClick={handleDelete}
-                        disabled={isDeleting}
-                        className="px-3 py-1.5 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors disabled:opacity-50"
-                    >
-                        {isDeleting ? 'Deleting...' : 'Confirm?'}
-                    </button>
-                    <button
-                        onClick={() => setIsConfirming(false)}
-                        disabled={isDeleting}
-                        className="px-3 py-1.5 text-sm border border-[hsl(var(--border))] rounded-md hover:bg-[hsl(var(--muted))] transition-colors"
-                    >
-                        Cancel
-                    </button>
-                </div>
-            )}
+            <Button
+                variant="outline"
+                size="sm"
+                onClick={handleDelete}
+                className="gap-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 border-red-200 dark:border-red-900/30"
+            >
+                <Trash2 className="w-4 h-4" />
+                Delete
+            </Button>
         </div>
     );
 }
