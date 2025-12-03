@@ -6,6 +6,7 @@ import NextImage from 'next/image';
 import { usePathname } from 'next/navigation';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
+import { ThemeToggle } from './ThemeToggle';
 
 export default function Navigation() {
     const pathname = usePathname();
@@ -88,7 +89,8 @@ export default function Navigation() {
                         </Link>
                     ))}
 
-                    <div className="pl-4 border-l border-[hsl(var(--border))] flex items-center">
+                    <div className="pl-4 border-l border-[hsl(var(--border))] flex items-center gap-2">
+                        <ThemeToggle />
                         <SignedOut>
                             <SignInButton mode="modal">
                                 <button className="text-sm font-medium hover:text-[hsl(var(--primary))] transition-colors text-[hsl(var(--muted-foreground))]">
@@ -141,7 +143,8 @@ export default function Navigation() {
                             animate="open"
                             exit="closed"
                             variants={menuVariants}
-                            className="fixed inset-0 bg-[hsl(var(--background))] z-[100] flex flex-col md:hidden"
+                            className="fixed inset-0 z-[100] flex flex-col md:hidden"
+                            style={{ backgroundColor: 'hsl(var(--background))' }}
                         >
                             <div className="flex flex-col justify-center flex-1 px-8 gap-8">
                                 {links.map((link, i) => (
@@ -203,9 +206,10 @@ export default function Navigation() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.5 }}
-                                className="p-8 text-[hsl(var(--muted-foreground))] text-sm"
+                                className="p-8 flex items-center justify-between text-[hsl(var(--muted-foreground))] text-sm"
                             >
-                                © {new Date().getFullYear()} Kitaek Lim
+                                <span>© {new Date().getFullYear()} Kitaek Lim</span>
+                                <ThemeToggle />
                             </motion.div>
                         </motion.div>
                     )}
