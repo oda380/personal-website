@@ -7,6 +7,7 @@ import NextImage from 'next/image';
 import { usePathname } from 'next/navigation';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
+import { X } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 
 export default function Navigation() {
@@ -35,7 +36,7 @@ export default function Navigation() {
             opacity: 0,
             y: "-100%",
             transition: {
-                duration: 0.5,
+                duration: 0.4,
                 ease: [0.22, 1, 0.36, 1]
             }
         },
@@ -43,7 +44,7 @@ export default function Navigation() {
             opacity: 1,
             y: 0,
             transition: {
-                duration: 0.5,
+                duration: 0.4,
                 ease: [0.22, 1, 0.36, 1]
             }
         }
@@ -152,6 +153,18 @@ export default function Navigation() {
                                 variants={menuVariants}
                                 className="fixed inset-0 z-[100] flex flex-col md:hidden mobile-menu-overlay"
                             >
+                                {/* Close Button */}
+                                <motion.button
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.3 }}
+                                    onClick={() => setIsOpen(false)}
+                                    className="absolute top-6 right-6 p-2 hover:bg-[hsl(var(--muted))] rounded-lg transition-colors"
+                                    aria-label="Close menu"
+                                >
+                                    <X className="w-6 h-6 text-[hsl(var(--foreground))]" />
+                                </motion.button>
+
                                 <div className="flex flex-col justify-center flex-1 px-8 gap-8">
                                     {links.map((link, i) => (
                                         <motion.div

@@ -25,7 +25,7 @@ export default function Home() {
     <div className="flex-1">
       {/* Hero Section */}
       <section className="border-b border-[hsl(var(--border))] relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-6 py-24 sm:py-32 relative z-10">
+        <div className="max-w-5xl mx-auto px-6 py-20 relative z-10">
           <div className="max-w-3xl">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}

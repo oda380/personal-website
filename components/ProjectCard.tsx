@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 
 interface Project {
     id?: number;
@@ -24,7 +25,7 @@ export default function ProjectCard({ project, index, children }: { project: Pro
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1, duration: 0.5 }}
             whileHover={{ y: -4, scale: 1.01 }}
-            className="bg-[hsl(var(--card))]/50 backdrop-blur-sm border border-[hsl(var(--border))] rounded-xl p-8 hover:border-[hsl(var(--primary))]/50 transition-all shadow-sm hover:shadow-lg hover:shadow-[hsl(var(--primary))]/5"
+            className="bg-[hsl(var(--card))]/50 backdrop-blur-sm border border-[hsl(var(--border))] rounded-xl p-8 hover:border-[hsl(var(--primary))]/50 transition-all shadow-sm hover:shadow-lg hover:shadow-[hsl(var(--primary))]/10"
         >
             <div className="flex items-start justify-between gap-4 mb-4">
                 <div className="flex-1">
@@ -60,7 +61,7 @@ export default function ProjectCard({ project, index, children }: { project: Pro
             <ul className="space-y-2 mb-6">
                 {project.highlights.map((highlight, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-sm text-[hsl(var(--muted-foreground))]">
-                        <span className="text-[hsl(var(--primary))] mt-1">→</span>
+                        <ArrowRight className="w-4 h-4 text-[hsl(var(--primary))] mt-0.5 flex-shrink-0" />
                         <span>{highlight}</span>
                     </li>
                 ))}
@@ -72,9 +73,10 @@ export default function ProjectCard({ project, index, children }: { project: Pro
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-sm font-medium text-[hsl(var(--primary))] hover:underline"
+                        className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[hsl(var(--primary))] hover:bg-[hsl(var(--muted))] rounded-lg transition-colors"
                     >
-                        View Project →
+                        View Project
+                        <ArrowRight className="w-4 h-4" />
                     </Link>
                 </div>
             )}

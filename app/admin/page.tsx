@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getProjects } from '@/lib/db';
 import { getPosts } from '@/lib/db';
+import { Button } from '@/components/ui/Button';
 
 export default async function AdminDashboard() {
     const projects = await getProjects();
@@ -31,18 +32,21 @@ export default async function AdminDashboard() {
             <div className="space-y-6">
                 <div>
                     <h2 className="text-xl font-bold mb-4">Quick Actions</h2>
-                    <div className="flex gap-4">
-                        <Link
-                            href="/admin/projects/new"
-                            className="px-6 py-3 bg-[hsl(var(--primary))] text-white rounded-lg hover:bg-[hsl(var(--primary))]/90 transition-colors"
-                        >
-                            Create Project
+                    <div className="flex flex-wrap gap-4">
+                        <Link href="/admin/projects/new">
+                            <Button variant="primary">
+                                Create Project
+                            </Button>
                         </Link>
-                        <Link
-                            href="/admin/posts/new"
-                            className="px-6 py-3 border border-[hsl(var(--border))] rounded-lg hover:bg-[hsl(var(--muted))] transition-colors"
-                        >
-                            Create Post
+                        <Link href="/admin/posts/new">
+                            <Button variant="outline">
+                                Create Post
+                            </Button>
+                        </Link>
+                        <Link href="/admin/settings">
+                            <Button variant="outline">
+                                Edit Settings
+                            </Button>
                         </Link>
                     </div>
                 </div>
