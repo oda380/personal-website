@@ -9,6 +9,7 @@ interface Settings {
     twitter_url: string;
     linkedin_url: string;
     email: string;
+    profile_image_url?: string;
 }
 
 export default function AboutPage() {
