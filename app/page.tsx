@@ -1,65 +1,115 @@
-import Image from "next/image";
+'use client';
+
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="flex-1">
+      {/* Hero Section */}
+      <section className="border-b border-[hsl(var(--border))] relative overflow-hidden">
+        <div className="max-w-5xl mx-auto px-6 py-24 sm:py-32 relative z-10">
+          <div className="max-w-3xl">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-5xl sm:text-6xl font-bold tracking-tight mb-6"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              Building Web3 products
+              <br />
+              <span className="text-[hsl(var(--primary))] relative inline-block">
+                that people actually use
+                <motion.span
+                  initial={{ width: 0 }}
+                  animate={{ width: '100%' }}
+                  transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+                  className="absolute bottom-2 left-0 h-3 bg-[hsl(var(--primary))]/20 -z-10 -rotate-1"
+                />
+              </span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="text-xl text-[hsl(var(--muted-foreground))] mb-10 leading-relaxed"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              Product-focused developer working at the intersection of blockchain, payments, and user experience.
+              Currently building loyalty systems, on-chain games, and tools that bridge Web2 and Web3.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+              className="flex flex-wrap gap-4"
+            >
+              <Link
+                href="/projects"
+                className="px-6 py-3 bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))]/90 text-white font-medium rounded-lg transition-all hover:scale-105 shadow-lg shadow-[hsl(var(--primary))]/20"
+              >
+                View Projects →
+              </Link>
+              <Link
+                href="/writing"
+                className="px-6 py-3 border border-[hsl(var(--border))] hover:bg-[hsl(var(--muted))] font-medium rounded-lg transition-colors bg-[hsl(var(--card))]/50 backdrop-blur-sm"
+              >
+                Read Writing
+              </Link>
+            </motion.div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Skills Section */}
+      <section className="max-w-5xl mx-auto px-6 py-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            {
+              title: "Web3 Product",
+              description: "Designing tokenized loyalty systems, on-chain games, and practical blockchain applications on Base and Ethereum.",
+              icon: (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              )
+            },
+            {
+              title: "Full-Stack Dev",
+              description: "Building backends with Node.js and TypeScript, creating polished frontends with Next.js and Tailwind CSS.",
+              icon: (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              )
+            },
+            {
+              title: "Risk & Operations",
+              description: "Combining on-chain analysis with internal tools to trace risk, prevent fraud, and maintain compliance.",
+              icon: (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              )
+            }
+          ].map((skill, idx) => (
+            <motion.div
+              key={skill.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 + 0.5, duration: 0.5 }}
+              whileHover={{ y: -5 }}
+              className="bg-[hsl(var(--card))]/50 backdrop-blur-sm border border-[hsl(var(--border))] rounded-xl p-8 hover:border-[hsl(var(--primary))]/50 transition-colors shadow-sm hover:shadow-md"
+            >
+              <div className="w-12 h-12 rounded-lg bg-[hsl(var(--primary))]/10 flex items-center justify-center mb-4 text-[hsl(var(--primary))]">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  {skill.icon}
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold mb-3">{skill.title}</h3>
+              <p className="text-[hsl(var(--muted-foreground))] leading-relaxed">
+                {skill.description}
+              </p>
+            </motion.div>
+          ))}
         </div>
-      </main>
+      </section>
     </div>
   );
 }
