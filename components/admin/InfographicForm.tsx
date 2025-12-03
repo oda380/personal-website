@@ -37,7 +37,7 @@ export function InfographicForm({ initialData, mode }: InfographicFormProps) {
             return;
         }
 
-        // Validate file size (10MB)
+        // Validate file size (max 10MB - Pinata supports much larger, but let's keep a reasonable limit)
         if (file.size > 10 * 1024 * 1024) {
             toast.error('File size must be less than 10MB');
             return;
@@ -45,22 +45,38 @@ export function InfographicForm({ initialData, mode }: InfographicFormProps) {
 
         setUploading(true);
         try {
+            // 1. Get temporary upload credentials
+            const keyRes = await fetch('/api/pinata/key', { method: 'POST' });
+            if (!keyRes.ok) throw new Error('Failed to get upload credentials');
+            const keyData = await keyRes.json();
+            const { JWT } = keyData;
+
+            // 2. Upload directly to Pinata
             const formData = new FormData();
             formData.append('file', file);
 
-            const response = await fetch('/api/upload-to-pinata', {
+            const uploadRes = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
                 method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${JWT}`,
+                },
                 body: formData,
             });
 
-            if (!response.ok) {
-                throw new Error('Upload failed');
-            }
+            if (!uploadRes.ok) throw new Error('Upload to Pinata failed');
 
-            const { imageUrl: url, cid } = await response.json();
-            setImageUrl(url);
-            setPinataCid(cid);
-            toast.success('Image uploaded to Pinata successfully!');
+            const uploadData = await uploadRes.json();
+            const { IpfsHash } = uploadData;
+
+            // 3. Set state
+            // Use the gateway URL from env or fallback to public gateway
+            const gateway = process.env.NEXT_PUBLIC_PINATA_GATEWAY_URL || 'https://gateway.pinata.cloud';
+            const imageUrl = `${gateway}/ipfs/${IpfsHash}`;
+
+            setImageUrl(imageUrl);
+            setPinataCid(IpfsHash);
+            toast.success('Image uploaded successfully!');
+
         } catch (error) {
             console.error('Upload error:', error);
             toast.error('Failed to upload image');
