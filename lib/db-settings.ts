@@ -6,7 +6,16 @@ export async function getSettings(): Promise<Settings> {
 
     const settings: any = {};
     rows.forEach(row => {
-        settings[row.key] = row.value;
+        if (row.key === 'home_skills') {
+            try {
+                settings[row.key] = JSON.parse(row.value);
+            } catch (e) {
+                console.error('Failed to parse home_skills:', e);
+                settings[row.key] = [];
+            }
+        } else {
+            settings[row.key] = row.value;
+        }
     });
 
     return settings as Settings;
@@ -15,11 +24,12 @@ export async function getSettings(): Promise<Settings> {
 export async function updateSettings(settings: Partial<Settings>): Promise<void> {
     for (const [key, value] of Object.entries(settings)) {
         if (value !== undefined) {
+            const dbValue = key === 'home_skills' ? JSON.stringify(value) : value;
             await sql`
         INSERT INTO settings (key, value, updated_at)
-        VALUES (${key}, ${value}, NOW())
+        VALUES (${key}, ${dbValue}, NOW())
         ON CONFLICT (key) 
-        DO UPDATE SET value = ${value}, updated_at = NOW()
+        DO UPDATE SET value = ${dbValue}, updated_at = NOW()
       `;
         }
     }

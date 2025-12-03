@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { toast } from 'sonner';
 import { Post } from '@/lib/types';
 
 export default function PostsTable({ posts }: { posts: Post[] }) {
@@ -9,12 +10,13 @@ export default function PostsTable({ posts }: { posts: Post[] }) {
             try {
                 const res = await fetch(`/api/posts/${id}`, { method: 'DELETE' });
                 if (res.ok) {
+                    toast.success('Post deleted successfully');
                     window.location.reload();
                 } else {
-                    alert('Failed to delete post');
+                    toast.error('Failed to delete post');
                 }
             } catch (error) {
-                alert('Error deleting post');
+                toast.error('Error deleting post');
             }
         }
     };

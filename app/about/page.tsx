@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { SignedIn, SignedOut } from '@clerk/nextjs';
+import { toast } from 'sonner';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 interface Settings {
     about_content: string;
@@ -54,13 +56,13 @@ export default function AboutPage() {
 
             if (res.ok) {
                 setIsEditing(false);
-                alert('About page updated successfully!');
+                toast.success('About page updated successfully!');
             } else {
-                alert('Failed to update about page');
+                toast.error('Failed to update about page');
             }
         } catch (error) {
             console.error('Error updating about content:', error);
-            alert('Error updating about page');
+            toast.error('Error updating about page');
         } finally {
             setIsSaving(false);
         }
@@ -68,8 +70,33 @@ export default function AboutPage() {
 
     if (isLoading) {
         return (
-            <div className="flex-1 flex items-center justify-center min-h-[50vh]">
-                <div className="animate-pulse text-[hsl(var(--muted-foreground))]">Loading profile...</div>
+            <div className="flex-1">
+                <div className="max-w-5xl mx-auto px-6 py-20">
+                    <div className="grid md:grid-cols-[320px_1fr] gap-12 items-start">
+                        <div className="space-y-8">
+                            <Skeleton className="aspect-square rounded-2xl" />
+                            <div className="space-y-4">
+                                <div>
+                                    <Skeleton className="h-8 w-48 mb-2" />
+                                    <Skeleton className="h-6 w-32" />
+                                </div>
+                                <div className="flex gap-3">
+                                    <Skeleton className="h-10 w-10 rounded-lg" />
+                                    <Skeleton className="h-10 w-10 rounded-lg" />
+                                    <Skeleton className="h-10 w-10 rounded-lg" />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="space-y-4">
+                            <Skeleton className="h-4 w-full" />
+                            <Skeleton className="h-4 w-full" />
+                            <Skeleton className="h-4 w-3/4" />
+                            <Skeleton className="h-4 w-full mt-8" />
+                            <Skeleton className="h-4 w-full" />
+                            <Skeleton className="h-4 w-5/6" />
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

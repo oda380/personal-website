@@ -4,6 +4,7 @@ import './globals.css';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import BackgroundGradient from '@/components/BackgroundGradient';
+import { Toaster } from 'sonner';
 
 export const metadata = {
   title: 'Kitaek Lim - Web3 Product Builder',
@@ -25,6 +26,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <Toaster position="bottom-right" theme="system" />
         </body>
       </html>
     </ClerkProvider>

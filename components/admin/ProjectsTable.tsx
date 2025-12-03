@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { toast } from 'sonner';
 import { Project } from '@/lib/types';
 
 export default function ProjectsTable({ projects }: { projects: Project[] }) {
@@ -9,12 +10,13 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
             try {
                 const res = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
                 if (res.ok) {
+                    toast.success('Project deleted successfully');
                     window.location.reload();
                 } else {
-                    alert('Failed to delete project');
+                    toast.error('Failed to delete project');
                 }
             } catch (error) {
-                alert('Error deleting project');
+                toast.error('Error deleting project');
             }
         }
     };
