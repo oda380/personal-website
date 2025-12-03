@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { auth } from '@clerk/nextjs/server';
 import { getProjectById, updateProject, deleteProject } from '@/lib/db';
 
@@ -51,6 +52,9 @@ export async function PUT(
         const body = await request.json();
         const project = await updateProject(id, body);
 
+        revalidatePath('/projects');
+        revalidatePath('/admin/projects');
+
         return NextResponse.json(project);
     } catch (error) {
         console.error('Error updating project:', error);
@@ -79,6 +83,9 @@ export async function DELETE(
 
         const id = parseInt(params.id);
         await deleteProject(id);
+
+        revalidatePath('/projects');
+        revalidatePath('/admin/projects');
 
         return NextResponse.json({ success: true });
     } catch (error) {

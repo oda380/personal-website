@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { auth } from '@clerk/nextjs/server';
 import { getProjects, createProject } from '@/lib/db';
 
@@ -30,6 +31,9 @@ export async function POST(request: NextRequest) {
 
         const body = await request.json();
         const project = await createProject(body);
+
+        revalidatePath('/projects');
+        revalidatePath('/admin/projects');
 
         return NextResponse.json(project, { status: 201 });
     } catch (error) {
