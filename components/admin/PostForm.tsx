@@ -6,6 +6,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import dynamic from 'next/dynamic';
+import { useTheme } from 'next-themes';
 import { calculateReadingTime } from '@/lib/blog-utils';
 import { toast } from 'sonner';
 
@@ -37,9 +38,18 @@ interface PostFormProps {
 
 export default function PostForm({ post, mode }: PostFormProps) {
     const router = useRouter();
+    const { theme, resolvedTheme } = useTheme();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [markdownContent, setMarkdownContent] = useState(post?.content || '');
     const [readingTime, setReadingTime] = useState(post?.readingTimeMinutes || 0);
+    const [mounted, setMounted] = useState(false);
+
+    // Determine the current theme for the markdown editor
+    const editorTheme = resolvedTheme === 'dark' ? 'dark' : 'light';
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const { register, control, handleSubmit, setValue, watch, formState: { errors } } = useForm<PostFormData>({
         resolver: zodResolver(postSchema),
@@ -234,15 +244,17 @@ export default function PostForm({ post, mode }: PostFormProps) {
                         ~{readingTime} min read
                     </span>
                 </div>
-                <div data-color-mode="dark">
-                    <MDEditor
-                        value={markdownContent}
-                        onChange={(val) => setMarkdownContent(val || '')}
-                        height={500}
-                        preview="live"
-                        className="rounded-lg border border-[hsl(var(--border))] overflow-hidden"
-                    />
-                </div>
+                {mounted && (
+                    <div data-color-mode={editorTheme}>
+                        <MDEditor
+                            value={markdownContent}
+                            onChange={(val) => setMarkdownContent(val || '')}
+                            height={500}
+                            preview="live"
+                            className="rounded-lg border border-[hsl(var(--border))] overflow-hidden"
+                        />
+                    </div>
+                )}
                 <p className="text-sm text-[hsl(var(--muted-foreground))] mt-2">
                     Supports GitHub Flavored Markdown. Preview shown on the right.
                 </p>
