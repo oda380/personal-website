@@ -24,7 +24,7 @@ export async function getSettings(): Promise<Settings> {
 export async function updateSettings(settings: Partial<Settings>): Promise<void> {
     for (const [key, value] of Object.entries(settings)) {
         if (value !== undefined) {
-            const dbValue = key === 'home_skills' ? JSON.stringify(value) : value;
+            const dbValue: string = key === 'home_skills' ? JSON.stringify(value) : String(value);
             await sql`
         INSERT INTO settings (key, value, updated_at)
         VALUES (${key}, ${dbValue}, NOW())
