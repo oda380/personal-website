@@ -21,7 +21,10 @@ const postSchema = z.object({
     slug: z.string().min(1, 'Slug is required'),
     excerpt: z.string().min(1, 'Excerpt is required'),
     content: z.string().optional(),
-    featuredImageUrl: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+    featuredImageUrl: z.string().optional().refine(
+        (val) => !val || val === '' || z.string().url().safeParse(val).success,
+        { message: 'Must be a valid URL or empty' }
+    ),
     status: z.enum(['planned', 'draft', 'published']),
     tags: z.array(z.object({ value: z.string() })).min(1, 'At least one tag required'),
     lastUpdated: z.string().min(1, 'Last updated date is required'),
