@@ -6,6 +6,8 @@ import { getPosts } from '@/lib/db';
 import { PostsList } from '@/components/PostsList';
 import { PageHeader } from '@/components/PageHeader';
 
+export const dynamic = 'force-dynamic';
+
 export default async function WritingPage() {
     const allPosts = await getPosts();
     const publishedPosts = allPosts.filter(post => post.status === 'published');

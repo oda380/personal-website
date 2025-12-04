@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { getPosts } from '@/lib/db';
 import PostsTable from '@/components/admin/PostsTable';
 
+export const dynamic = 'force-dynamic';
+
 export default async function PostsManagementPage() {
     const posts = await getPosts();
 
