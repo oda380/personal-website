@@ -60,6 +60,7 @@ export default function PostForm({ post, mode }: PostFormProps) {
             ...post,
             excerpt: post.excerpt || post.oneLiner,
             tags: post.tags?.map((v: string) => ({ value: v })) || [{ value: '' }],
+            featuredImageUrl: post.featuredImageUrl || '',
         } : {
             tags: [{ value: '' }],
             status: 'planned',

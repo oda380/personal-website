@@ -25,6 +25,10 @@ CREATE TABLE IF NOT EXISTS posts (
   tags JSONB NOT NULL DEFAULT '[]',
   last_updated TEXT NOT NULL,
   key_idea TEXT NOT NULL,
+  content TEXT,
+  excerpt TEXT,
+  featured_image_url TEXT,
+  reading_time_minutes INTEGER,
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
 );
