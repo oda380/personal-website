@@ -10,13 +10,14 @@ import { formatReadingTime } from '@/lib/blog-utils';
 export const dynamic = 'force-dynamic';
 
 interface PageProps {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const post = await getPostBySlug(params.slug);
+    const { slug } = await params;
+    const post = await getPostBySlug(slug);
 
     if (!post) {
         return {
@@ -54,7 +55,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-    const post = await getPostBySlug(params.slug);
+    const { slug } = await params;
+    const post = await getPostBySlug(slug);
 
     if (!post || post.status !== 'published') {
         notFound();
