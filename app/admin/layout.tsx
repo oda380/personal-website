@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, LayoutDashboard, FolderKanban, FileText, BarChart3, Settings, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function AdminLayout({
     children,
@@ -130,9 +131,12 @@ export default function AdminLayout({
 
                     {/* Profile Section */}
                     <div className="relative p-4 border-t border-[hsl(var(--border))]/50">
-                        <div className="flex items-center gap-3 px-2 py-2 rounded-xl bg-[hsl(var(--muted))]/20 backdrop-blur-sm">
-                            <UserButton afterSignOutUrl="/" />
-                            <span className="text-sm font-medium text-[hsl(var(--foreground))]/80">Admin User</span>
+                        <div className="flex items-center justify-between px-2 py-2 rounded-xl bg-[hsl(var(--muted))]/20 backdrop-blur-sm">
+                            <div className="flex items-center gap-3">
+                                <UserButton afterSignOutUrl="/" />
+                                <span className="text-sm font-medium text-[hsl(var(--foreground))]/80">Admin User</span>
+                            </div>
+                            <ThemeToggle />
                         </div>
                     </div>
                 </div>

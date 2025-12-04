@@ -36,10 +36,20 @@ export interface Post {
   title: string;
   slug: string;
   status: 'planned' | 'draft' | 'published';
-  oneLiner: string;
+
+  // New blog fields
+  excerpt: string;              // Short description for cards
+  content?: string;             // Full markdown content
+  featuredImageUrl?: string;    // Featured image URL
+  readingTimeMinutes?: number;  // Auto-calculated reading time
+
+  // Legacy fields (keep for backward compatibility)
+  oneLiner: string;             // Deprecated: use excerpt
+  keyIdea: string;              // Kept for callout boxes
+
+  // Metadata
   tags: string[];
   lastUpdated: string;
-  keyIdea: string;
 }
 
 export interface Infographic {

@@ -1,19 +1,31 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import dynamic from 'next/dynamic';
+import { calculateReadingTime } from '@/lib/blog-utils';
+import { toast } from 'sonner';
+
+// Dynamically import markdown editor (client-side only)
+const MDEditor = dynamic(
+    () => import('@uiw/react-md-editor'),
+    { ssr: false }
+);
 
 const postSchema = z.object({
     title: z.string().min(1, 'Title is required'),
     slug: z.string().min(1, 'Slug is required'),
-    oneLiner: z.string().min(1, 'One-liner is required'),
+    excerpt: z.string().min(1, 'Excerpt is required'),
+    content: z.string().optional(),
+    featuredImageUrl: z.string().url('Must be a valid URL').optional().or(z.literal('')),
     status: z.enum(['planned', 'draft', 'published']),
     tags: z.array(z.object({ value: z.string() })).min(1, 'At least one tag required'),
     lastUpdated: z.string().min(1, 'Last updated date is required'),
     keyIdea: z.string().min(1, 'Key idea is required'),
+    oneLiner: z.string().optional(), // Deprecated but kept for backward compatibility
 });
 
 type PostFormData = z.infer<typeof postSchema>;
@@ -26,16 +38,23 @@ interface PostFormProps {
 export default function PostForm({ post, mode }: PostFormProps) {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [markdownContent, setMarkdownContent] = useState(post?.content || '');
+    const [readingTime, setReadingTime] = useState(post?.readingTimeMinutes || 0);
 
-    const { register, control, handleSubmit, formState: { errors } } = useForm<PostFormData>({
+    const { register, control, handleSubmit, setValue, watch, formState: { errors } } = useForm<PostFormData>({
         resolver: zodResolver(postSchema),
         defaultValues: post ? {
             ...post,
+            excerpt: post.excerpt || post.oneLiner,
             tags: post.tags?.map((v: string) => ({ value: v })) || [{ value: '' }],
         } : {
             tags: [{ value: '' }],
             status: 'planned',
             lastUpdated: new Date().toISOString().split('T')[0],
+            excerpt: '',
+            content: '',
+            featuredImageUrl: '',
+            oneLiner: '',
         },
     });
 
@@ -44,12 +63,37 @@ export default function PostForm({ post, mode }: PostFormProps) {
         name: 'tags',
     });
 
+    // Update reading time when content changes
+    useEffect(() => {
+        if (markdownContent) {
+            const time = calculateReadingTime(markdownContent);
+            setReadingTime(time);
+        }
+    }, [markdownContent]);
+
+    // Auto-generate slug from title
+    const title = watch('title');
+    useEffect(() => {
+        if (mode === 'create' && title) {
+            const slug = title
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)/g, '');
+            setValue('slug', slug);
+        }
+    }, [title, mode, setValue]);
+
     const onSubmit = async (data: PostFormData) => {
         setIsSubmitting(true);
 
         const payload = {
             ...data,
+            content: markdownContent,
+            readingTimeMinutes: readingTime,
+            excerpt: data.excerpt,
+            oneLiner: data.excerpt, // Copy excerpt to oneLiner for backward compatibility
             tags: data.tags.map(t => t.value).filter(Boolean),
+            featuredImageUrl: data.featuredImageUrl || undefined,
         };
 
         try {
@@ -64,11 +108,12 @@ export default function PostForm({ post, mode }: PostFormProps) {
 
             if (!res.ok) throw new Error('Failed to save post');
 
+            toast.success(mode === 'create' ? 'Post created successfully!' : 'Post updated successfully!');
             router.push('/admin/posts');
             router.refresh();
         } catch (error) {
             console.error(error);
-            alert('Failed to save post');
+            toast.error('Failed to save post');
         } finally {
             setIsSubmitting(false);
         }
@@ -81,6 +126,7 @@ export default function PostForm({ post, mode }: PostFormProps) {
                 <input
                     {...register('title')}
                     className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    placeholder="Your blog post title..."
                 />
                 {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
             </div>
@@ -90,17 +136,30 @@ export default function PostForm({ post, mode }: PostFormProps) {
                 <input
                     {...register('slug')}
                     className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    placeholder="url-friendly-slug"
                 />
                 {errors.slug && <p className="text-red-500 text-sm mt-1">{errors.slug.message}</p>}
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">One-Liner</label>
+                <label className="block text-sm font-medium mb-2">Excerpt</label>
                 <input
-                    {...register('oneLiner')}
+                    {...register('excerpt')}
                     className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    placeholder="A short description that appears on the blog listing..."
                 />
-                {errors.oneLiner && <p className="text-red-500 text-sm mt-1">{errors.oneLiner.message}</p>}
+                {errors.excerpt && <p className="text-red-500 text-sm mt-1">{errors.excerpt.message}</p>}
+            </div>
+
+            <div>
+                <label className="block text-sm font-medium mb-2">Featured Image URL</label>
+                <input
+                    {...register('featuredImageUrl')}
+                    type="url"
+                    className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    placeholder="https://example.com/image.jpg"
+                />
+                {errors.featuredImageUrl && <p className="text-red-500 text-sm mt-1">{errors.featuredImageUrl.message}</p>}
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -161,11 +220,32 @@ export default function PostForm({ post, mode }: PostFormProps) {
                 <label className="block text-sm font-medium mb-2">Key Idea</label>
                 <textarea
                     {...register('keyIdea')}
-                    rows={4}
+                    rows={3}
                     placeholder="The main takeaway or insight from this post..."
                     className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
                 />
                 {errors.keyIdea && <p className="text-red-500 text-sm mt-1">{errors.keyIdea.message}</p>}
+            </div>
+
+            <div>
+                <div className="flex items-center justify-between mb-2">
+                    <label className="block text-sm font-medium">Content (Markdown)</label>
+                    <span className="text-sm text-[hsl(var(--muted-foreground))]">
+                        ~{readingTime} min read
+                    </span>
+                </div>
+                <div data-color-mode="dark">
+                    <MDEditor
+                        value={markdownContent}
+                        onChange={(val) => setMarkdownContent(val || '')}
+                        height={500}
+                        preview="live"
+                        className="rounded-lg border border-[hsl(var(--border))] overflow-hidden"
+                    />
+                </div>
+                <p className="text-sm text-[hsl(var(--muted-foreground))] mt-2">
+                    Supports GitHub Flavored Markdown. Preview shown on the right.
+                </p>
             </div>
 
             <div className="flex gap-4 pt-4 border-t border-[hsl(var(--border))]">

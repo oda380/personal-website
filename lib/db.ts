@@ -192,6 +192,10 @@ export async function getPosts(): Promise<Post[]> {
         title: row.title,
         slug: row.slug,
         status: row.status,
+        excerpt: row.excerpt || row.one_liner,
+        content: row.content,
+        featuredImageUrl: row.featured_image_url,
+        readingTimeMinutes: row.reading_time_minutes,
         oneLiner: row.one_liner,
         tags: row.tags as string[],
         lastUpdated: row.last_updated,
@@ -214,6 +218,10 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
         title: row.title,
         slug: row.slug,
         status: row.status,
+        excerpt: row.excerpt || row.one_liner,
+        content: row.content,
+        featuredImageUrl: row.featured_image_url,
+        readingTimeMinutes: row.reading_time_minutes,
         oneLiner: row.one_liner,
         tags: row.tags as string[],
         lastUpdated: row.last_updated,
@@ -236,6 +244,10 @@ export async function getPostById(id: number): Promise<Post | null> {
         title: row.title,
         slug: row.slug,
         status: row.status,
+        excerpt: row.excerpt || row.one_liner,
+        content: row.content,
+        featuredImageUrl: row.featured_image_url,
+        readingTimeMinutes: row.reading_time_minutes,
         oneLiner: row.one_liner,
         tags: row.tags as string[],
         lastUpdated: row.last_updated,
@@ -246,14 +258,19 @@ export async function getPostById(id: number): Promise<Post | null> {
 export async function createPost(post: Omit<Post, 'id'>): Promise<Post> {
     const { rows } = await sql`
     INSERT INTO posts (
-      title, slug, status, one_liner, 
+      title, slug, status, one_liner, excerpt,
+      content, featured_image_url, reading_time_minutes,
       tags, last_updated, key_idea
     )
     VALUES (
       ${post.title}, 
       ${post.slug}, 
       ${post.status}, 
-      ${post.oneLiner},
+      ${post.oneLiner || post.excerpt},
+      ${post.excerpt},
+      ${post.content || null},
+      ${post.featuredImageUrl || null},
+      ${post.readingTimeMinutes || 1},
       ${JSON.stringify(post.tags)}::jsonb,
       ${post.lastUpdated},
       ${post.keyIdea}
@@ -265,6 +282,10 @@ export async function createPost(post: Omit<Post, 'id'>): Promise<Post> {
     return {
         ...row,
         tags: row.tags as string[],
+        excerpt: row.excerpt || row.one_liner,
+        content: row.content,
+        featuredImageUrl: row.featured_image_url,
+        readingTimeMinutes: row.reading_time_minutes,
     } as Post;
 }
 
@@ -300,6 +321,22 @@ export async function updatePost(id: number, post: Partial<Omit<Post, 'id'>>): P
     if (post.keyIdea !== undefined) {
         updates.push(`key_idea = $${paramIndex++}`);
         values.push(post.keyIdea);
+    }
+    if (post.excerpt !== undefined) {
+        updates.push(`excerpt = $${paramIndex++}`);
+        values.push(post.excerpt);
+    }
+    if (post.content !== undefined) {
+        updates.push(`content = $${paramIndex++}`);
+        values.push(post.content);
+    }
+    if (post.featuredImageUrl !== undefined) {
+        updates.push(`featured_image_url = $${paramIndex++}`);
+        values.push(post.featuredImageUrl);
+    }
+    if (post.readingTimeMinutes !== undefined) {
+        updates.push(`reading_time_minutes = $${paramIndex++}`);
+        values.push(post.readingTimeMinutes);
     }
 
     updates.push(`updated_at = NOW()`);
