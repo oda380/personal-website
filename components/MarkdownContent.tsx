@@ -46,6 +46,16 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
                             {children}
                         </a>
                     ),
+                    strong: ({ children }) => (
+                        <strong className="font-bold text-[hsl(var(--foreground))]">
+                            {children}
+                        </strong>
+                    ),
+                    em: ({ children }) => (
+                        <em className="italic">
+                            {children}
+                        </em>
+                    ),
                     ul: ({ children }) => (
                         <ul className="list-disc list-inside mb-6 space-y-2 text-[hsl(var(--foreground))]/90">
                             {children}
