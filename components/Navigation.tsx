@@ -19,6 +19,8 @@ export default function Navigation() {
         setMounted(true);
     }, []);
 
+    // Hide navigation on admin pages - moved to end of component to avoid hook errors
+
     // Lock body scroll when menu is open
     useEffect(() => {
         if (isOpen) {
@@ -70,6 +72,9 @@ export default function Navigation() {
         { href: '/daily-crypto', label: 'Daily Crypto' },
         { href: "/about", label: "About" },
     ];
+
+    // Hide navigation on admin pages
+    if (pathname?.startsWith('/admin')) return null;
 
     return (
         <nav className="sticky top-0 z-40 w-full border-b border-[hsl(var(--border))] bg-[hsl(var(--background))]/80 backdrop-blur-md">
