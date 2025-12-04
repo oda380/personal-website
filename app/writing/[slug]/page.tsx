@@ -7,6 +7,8 @@ import { getPostBySlug } from '@/lib/db';
 import { MarkdownContent } from '@/components/MarkdownContent';
 import { formatReadingTime } from '@/lib/blog-utils';
 
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
     params: {
         slug: string;
