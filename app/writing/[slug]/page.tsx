@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import type { Metadata } from 'next';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import { getPostBySlug } from '@/lib/db';
 import { MarkdownContent } from '@/components/MarkdownContent';
@@ -9,6 +10,44 @@ import { formatReadingTime } from '@/lib/blog-utils';
 interface PageProps {
     params: {
         slug: string;
+    };
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const post = await getPostBySlug(params.slug);
+
+    if (!post) {
+        return {
+            title: 'Post Not Found',
+        };
+    }
+
+    const title = post.title;
+    const description = post.excerpt || post.oneLiner;
+    const images = post.featuredImageUrl
+        ? [{ url: post.featuredImageUrl, width: 1200, height: 630, alt: title }]
+        : [];
+
+    return {
+        title,
+        description,
+        keywords: post.tags,
+        authors: [{ name: 'Kitaek Lim' }],
+        openGraph: {
+            title,
+            description,
+            type: 'article',
+            publishedTime: post.lastUpdated,
+            authors: ['Kitaek Lim'],
+            tags: post.tags,
+            images,
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images: post.featuredImageUrl ? [post.featuredImageUrl] : [],
+        },
     };
 }
 

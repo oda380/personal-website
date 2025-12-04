@@ -5,17 +5,7 @@ import { SignedIn } from '@clerk/nextjs';
 import AdminPostActions from '@/components/AdminPostActions';
 import PostCard from '@/components/PostCard';
 import { FilterButtons } from '@/components/FilterButtons';
-
-interface Post {
-    id?: number;
-    title: string;
-    slug: string;
-    oneLiner: string;
-    keyIdea: string;
-    tags: string[];
-    lastUpdated: string;
-    status: 'draft' | 'published' | 'archived' | 'planned';
-}
+import { Post } from '@/lib/types';
 
 export function PostsList({ posts }: { posts: Post[] }) {
     const [selectedStatus, setSelectedStatus] = useState<string>('All');
