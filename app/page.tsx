@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Settings } from '@/lib/types';
+import { getSettings } from '@/lib/db-settings';
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   product: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />,
@@ -7,25 +7,7 @@ const ICON_MAP: Record<string, React.ReactNode> = {
   shield: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />,
 };
 
-async function getSettings(): Promise<Settings> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-  try {
-    const res = await fetch(`${baseUrl}/api/settings`, {
-      cache: 'no-store',
-    });
-    if (!res.ok) throw new Error('Failed to fetch');
-    return res.json();
-  } catch {
-    return {
-      about_content: '',
-      github_url: '',
-      twitter_url: '',
-      linkedin_url: '',
-      email: '',
-      home_skills: [],
-    };
-  }
-}
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const settings = await getSettings();
