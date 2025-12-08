@@ -361,3 +361,83 @@ export async function updatePost(id: number, post: Partial<Omit<Post, 'id'>>): P
 export async function deletePost(id: number): Promise<void> {
     await sql`DELETE FROM posts WHERE id = ${id}`;
 }
+
+// Get published posts with pagination and optional search
+export async function getPublishedPosts(
+    limit: number = 10,
+    offset: number = 0,
+    search?: string
+): Promise<Post[]> {
+    let query;
+
+    if (search && search.trim()) {
+        const searchTerm = `%${search.trim().toLowerCase()}%`;
+        query = sql`
+            SELECT * FROM posts 
+            WHERE status = 'published'
+            AND (
+                LOWER(title) LIKE ${searchTerm}
+                OR LOWER(one_liner) LIKE ${searchTerm}
+                OR LOWER(excerpt) LIKE ${searchTerm}
+                OR EXISTS (
+                    SELECT 1 FROM jsonb_array_elements_text(tags) AS tag 
+                    WHERE LOWER(tag) LIKE ${searchTerm}
+                )
+            )
+            ORDER BY created_at DESC
+            LIMIT ${limit} OFFSET ${offset}
+        `;
+    } else {
+        query = sql`
+            SELECT * FROM posts 
+            WHERE status = 'published'
+            ORDER BY created_at DESC
+            LIMIT ${limit} OFFSET ${offset}
+        `;
+    }
+
+    const { rows } = await query;
+
+    return rows.map(row => ({
+        id: row.id,
+        title: row.title,
+        slug: row.slug,
+        status: row.status,
+        excerpt: row.excerpt || row.one_liner,
+        content: row.content,
+        featuredImageUrl: row.featured_image_url,
+        readingTimeMinutes: row.reading_time_minutes,
+        oneLiner: row.one_liner,
+        tags: row.tags as string[],
+        lastUpdated: row.last_updated,
+        keyIdea: row.key_idea,
+    })) as Post[];
+}
+
+// Get count of published posts (with optional search filter)
+export async function getPublishedPostsCount(search?: string): Promise<number> {
+    let query;
+
+    if (search && search.trim()) {
+        const searchTerm = `%${search.trim().toLowerCase()}%`;
+        query = sql`
+            SELECT COUNT(*) as count FROM posts 
+            WHERE status = 'published'
+            AND (
+                LOWER(title) LIKE ${searchTerm}
+                OR LOWER(one_liner) LIKE ${searchTerm}
+                OR LOWER(excerpt) LIKE ${searchTerm}
+                OR EXISTS (
+                    SELECT 1 FROM jsonb_array_elements_text(tags) AS tag 
+                    WHERE LOWER(tag) LIKE ${searchTerm}
+                )
+            )
+        `;
+    } else {
+        query = sql`SELECT COUNT(*) as count FROM posts WHERE status = 'published'`;
+    }
+
+    const { rows } = await query;
+    return parseInt(rows[0].count);
+}
+
