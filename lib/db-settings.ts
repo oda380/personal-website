@@ -1,5 +1,5 @@
 import { sql } from '@vercel/postgres';
-import { Settings } from './settings';
+import { Settings } from './types';
 
 export async function getSettings(): Promise<Settings> {
     const { rows } = await sql`SELECT key, value FROM settings`;

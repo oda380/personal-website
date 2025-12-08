@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { SignedIn } from '@clerk/nextjs';
-import AdminProjectActions from '@/components/AdminProjectActions';
+import AdminProjectActions from '@/components/admin/AdminProjectActions';
 import ProjectCard from '@/components/ProjectCard';
 import { FilterButtons } from '@/components/FilterButtons';
 

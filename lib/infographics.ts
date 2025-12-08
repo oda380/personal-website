@@ -8,22 +8,26 @@ export interface Infographic {
 }
 
 // Get all infographics, ordered by date DESC
-export async function getInfographics(limit?: number, month?: number, year?: number): Promise<Infographic[]> {
+export async function getInfographics(
+    limit?: number,
+    offset: number = 0,
+    month?: number,
+    year?: number
+): Promise<Infographic[]> {
     let query;
 
     if (month && year) {
-        // Filter by specific month and year
-        // Note: We use TO_CHAR for simpler date part extraction in the WHERE clause compatibility
         query = sql`
             SELECT * FROM infographics 
             WHERE EXTRACT(YEAR FROM date_posted) = ${year} 
             AND EXTRACT(MONTH FROM date_posted) = ${month}
             ORDER BY date_posted DESC
+            LIMIT ${limit || 1000} OFFSET ${offset}
         `;
     } else {
         query = limit
-            ? sql`SELECT * FROM infographics ORDER BY date_posted DESC LIMIT ${limit}`
-            : sql`SELECT * FROM infographics ORDER BY date_posted DESC`;
+            ? sql`SELECT * FROM infographics ORDER BY date_posted DESC LIMIT ${limit} OFFSET ${offset}`
+            : sql`SELECT * FROM infographics ORDER BY date_posted DESC OFFSET ${offset}`;
     }
 
     const result = await query;
@@ -34,6 +38,24 @@ export async function getInfographics(limit?: number, month?: number, year?: num
         imageUrl: row.image_url,
         pinataCid: row.pinata_cid
     }));
+}
+
+// Get total count of infographics (optional filtering)
+export async function getInfographicsCount(month?: number, year?: number): Promise<number> {
+    let query;
+
+    if (month && year) {
+        query = sql`
+            SELECT COUNT(*) as count FROM infographics 
+            WHERE EXTRACT(YEAR FROM date_posted) = ${year} 
+            AND EXTRACT(MONTH FROM date_posted) = ${month}
+        `;
+    } else {
+        query = sql`SELECT COUNT(*) as count FROM infographics`;
+    }
+
+    const result = await query;
+    return parseInt(result.rows[0].count);
 }
 
 // Get available months for filtering

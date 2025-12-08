@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { SignedIn } from '@clerk/nextjs';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import AdminPostActions from '@/components/AdminPostActions';
+import AdminPostActions from '@/components/admin/AdminPostActions';
 import PostCard from '@/components/PostCard';
 import { Post } from '@/lib/types';
 

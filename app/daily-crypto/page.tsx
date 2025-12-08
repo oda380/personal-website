@@ -32,8 +32,8 @@ export default function DailyCryptoPage() {
                 const latestData = await latestRes.json();
                 setLatest(latestData);
 
-                // Initial fetch for list (all time)
-                const allRes = await fetch('/api/infographics');
+                // Initial fetch for list (limit to 4: 1 for hero + 3 for list)
+                const allRes = await fetch('/api/infographics?limit=4');
                 const allData = await allRes.json();
 
                 setPrevious(
@@ -60,6 +60,9 @@ export default function DailyCryptoPage() {
             if (monthYear !== 'all') {
                 const [year, month] = monthYear.split('-');
                 url += `?year=${year}&month=${month}`;
+            } else {
+                // If switching back to 'all', re-apply the limit
+                url += '?limit=4';
             }
 
             const res = await fetch(url);
@@ -164,7 +167,7 @@ export default function DailyCryptoPage() {
 
                 <div className="flex items-center justify-between mb-8">
                     <h2 className="text-3xl font-bold flex items-center gap-3">
-                        <span>{selectedMonth === 'all' ? 'Previous Daily Updates' : formatMonthYear(selectedMonth)}</span>
+                        <span>{selectedMonth === 'all' ? 'Recent Updates' : formatMonthYear(selectedMonth)}</span>
                     </h2>
 
                     <div className="flex items-center gap-3">

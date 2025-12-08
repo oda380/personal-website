@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
 
         const infographics = await getInfographics(
             limit ? parseInt(limit) : undefined,
+            undefined, // offset
             month ? parseInt(month) : undefined,
             year ? parseInt(year) : undefined
         );
