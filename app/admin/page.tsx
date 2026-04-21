@@ -4,6 +4,8 @@ import { getPosts } from '@/lib/db';
 import { getInfographics } from '@/lib/infographics';
 import { Button } from '@/components/ui/Button';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminDashboard() {
     const projects = await getProjects();
     const posts = await getPosts();
@@ -55,7 +57,7 @@ export default async function AdminDashboard() {
                         </Link>
                         <Link href="/admin/infographics/new">
                             <Button variant="outline">
-                                Add Today's Crypto
+                                Add Today&apos;s Crypto
                             </Button>
                         </Link>
                         <Link href="/admin/settings">

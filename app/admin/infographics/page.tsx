@@ -5,6 +5,8 @@ import AdminInfographicActions from '@/components/admin/AdminInfographicActions'
 import AdminFilter from '@/components/admin/AdminFilter';
 import Pagination from '@/components/admin/Pagination';
 
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
@@ -45,7 +47,7 @@ export default async function AdminInfographicsPage({ searchParams }: PageProps)
                 <div className="flex items-center gap-4">
                     <AdminFilter />
                     <Link href="/admin/infographics/new">
-                        <Button variant="primary">Add Today's Crypto</Button>
+                        <Button variant="primary">Add Today&apos;s Crypto</Button>
                     </Link>
                 </div>
             </div>

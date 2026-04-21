@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { SignedIn } from '@clerk/nextjs';
-import { Plus, Search } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { getPublishedPosts, getPublishedPostsCount } from '@/lib/db';
 import { PostsList } from '@/components/PostsList';

@@ -74,6 +74,7 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
                             {children}
                         </blockquote>
                     ),
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     code: ({ inline, children, ...props }: any) =>
                         inline ? (
                             <code className="bg-[hsl(var(--muted))] px-2 py-1 rounded text-sm font-mono text-[hsl(var(--primary))]">
@@ -91,6 +92,7 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
                         <pre className="mb-6 overflow-x-auto">{children}</pre>
                     ),
                     img: ({ src, alt }) => (
+                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                             src={src}
                             alt={alt || ''}

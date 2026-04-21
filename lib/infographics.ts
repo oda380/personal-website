@@ -158,7 +158,7 @@ export async function updateInfographic(
     data: Partial<Omit<Infographic, 'id'>>
 ): Promise<Infographic> {
     const updates: string[] = [];
-    const values: any[] = [];
+    const values: unknown[] = [];
     let paramIndex = 1;
 
     if (data.datePosted !== undefined) {

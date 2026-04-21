@@ -4,7 +4,7 @@ import { Settings } from './types';
 export async function getSettings(): Promise<Settings> {
     const { rows } = await sql`SELECT key, value FROM settings`;
 
-    const settings: any = {};
+    const settings: Record<string, unknown> = {};
     rows.forEach(row => {
         if (row.key === 'home_skills') {
             try {
@@ -18,7 +18,7 @@ export async function getSettings(): Promise<Settings> {
         }
     });
 
-    return settings as Settings;
+    return settings as unknown as Settings;
 }
 
 export async function updateSettings(settings: Partial<Settings>): Promise<void> {

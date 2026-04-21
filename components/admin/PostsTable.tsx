@@ -17,7 +17,7 @@ export default function PostsTable({ posts }: { posts: Post[] }) {
                 } else {
                     toast.error('Failed to delete post');
                 }
-            } catch (error) {
+            } catch {
                 toast.error('Error deleting post');
             }
         }

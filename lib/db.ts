@@ -104,7 +104,7 @@ export async function createProject(project: Omit<Project, 'id'>): Promise<Proje
 
 export async function updateProject(id: number, project: Partial<Omit<Project, 'id'>>): Promise<Project> {
     const updates: string[] = [];
-    const values: any[] = [];
+    const values: unknown[] = [];
     let paramIndex = 1;
 
     if (project.title !== undefined) {
@@ -291,7 +291,7 @@ export async function createPost(post: Omit<Post, 'id'>): Promise<Post> {
 
 export async function updatePost(id: number, post: Partial<Omit<Post, 'id'>>): Promise<Post> {
     const updates: string[] = [];
-    const values: any[] = [];
+    const values: unknown[] = [];
     let paramIndex = 1;
 
     if (post.title !== undefined) {

@@ -16,7 +16,7 @@ export default function Navigation() {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        setMounted(true);
+        setTimeout(() => setMounted(true), 0);
     }, []);
 
     // Hide navigation on admin pages - moved to end of component to avoid hook errors

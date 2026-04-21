@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { DayPicker } from 'react-day-picker';
-import { format, parseISO, isSameDay } from 'date-fns';
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import { format, parseISO } from 'date-fns';
+import { Calendar as CalendarIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import 'react-day-picker/dist/style.css';
 
@@ -30,7 +30,7 @@ export function DailyCryptoCalendar() {
         if (isOpen && postedDates.length === 0) {
             fetchDates();
         }
-    }, [isOpen]);
+    }, [isOpen, postedDates.length]);
 
     const handleDayClick = (day: Date | undefined) => {
         if (!day) return;

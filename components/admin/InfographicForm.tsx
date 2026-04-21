@@ -115,9 +115,9 @@ export function InfographicForm({ initialData, mode }: InfographicFormProps) {
             toast.success(`Infographic ${mode === 'create' ? 'created' : 'updated'} successfully!`);
             router.push('/admin/infographics');
             router.refresh();
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Save error:', error);
-            toast.error(error.message || 'Failed to save infographic');
+            toast.error((error as Error).message || 'Failed to save infographic');
         } finally {
             setSaving(false);
         }

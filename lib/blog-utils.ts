@@ -28,7 +28,7 @@ export function generateExcerpt(markdown: string, maxLength: number = 160): stri
     }
 
     // Remove markdown formatting
-    let plainText = markdown
+    const plainText = markdown
         // Remove code blocks
         .replace(/```[\s\S]*?```/g, '')
         // Remove inline code

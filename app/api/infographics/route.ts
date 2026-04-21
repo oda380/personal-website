@@ -51,11 +51,11 @@ export async function POST(request: NextRequest) {
         });
 
         return NextResponse.json(infographic, { status: 201 });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('Error creating infographic:', error);
 
         // Check for unique constraint violation
-        if (error.message?.includes('unique')) {
+        if ((error as Error).message?.includes('unique')) {
             return NextResponse.json(
                 { error: 'An infographic for this date already exists' },
                 { status: 409 }

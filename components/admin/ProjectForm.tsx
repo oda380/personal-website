@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useForm, useFieldArray, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { Project } from '@/lib/types';
 
 const projectSchema = z.object({
     title: z.string().min(1, 'Title is required'),
@@ -23,7 +24,7 @@ const projectSchema = z.object({
 type ProjectFormData = z.infer<typeof projectSchema>;
 
 interface ProjectFormProps {
-    project?: any;
+    project?: Project | null;
     mode: 'create' | 'edit';
 }
 
@@ -75,7 +76,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
         };
 
         try {
-            const url = mode === 'create' ? '/api/projects' : `/api/projects/${project.id}`;
+            const url = mode === 'create' ? '/api/projects' : `/api/projects/${project?.id}`;
             const method = mode === 'create' ? 'POST' : 'PUT';
 
             const res = await fetch(url, {

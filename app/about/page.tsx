@@ -110,6 +110,7 @@ export default function AboutPage() {
                     <div className="md:sticky md:top-24 space-y-8">
                         <div className="aspect-square rounded-2xl bg-gradient-to-br from-[hsl(var(--primary))]/20 via-[hsl(var(--secondary))]/15 to-[hsl(var(--primary))]/5 border border-[hsl(var(--border))] flex items-center justify-center shadow-sm overflow-hidden relative">
                             {settings.profile_image_url ? (
+                                // eslint-disable-next-line @next/next/no-img-element
                                 <img
                                     src={settings.profile_image_url}
                                     alt="Profile"

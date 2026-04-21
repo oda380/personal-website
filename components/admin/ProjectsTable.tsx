@@ -17,7 +17,7 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
                 } else {
                     toast.error('Failed to delete project');
                 }
-            } catch (error) {
+            } catch {
                 toast.error('Error deleting project');
             }
         }

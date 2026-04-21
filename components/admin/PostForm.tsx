@@ -9,6 +9,7 @@ import dynamic from 'next/dynamic';
 import { useTheme } from 'next-themes';
 import { calculateReadingTime } from '@/lib/blog-utils';
 import { toast } from 'sonner';
+import { Post } from '@/lib/types';
 
 // Dynamically import markdown editor (client-side only)
 const MDEditor = dynamic(
@@ -35,13 +36,13 @@ const postSchema = z.object({
 type PostFormData = z.infer<typeof postSchema>;
 
 interface PostFormProps {
-    post?: any;
+    post?: Post | null;
     mode: 'create' | 'edit';
 }
 
 export default function PostForm({ post, mode }: PostFormProps) {
     const router = useRouter();
-    const { theme, resolvedTheme } = useTheme();
+    const { resolvedTheme } = useTheme();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [markdownContent, setMarkdownContent] = useState(post?.content || '');
     const [readingTime, setReadingTime] = useState(post?.readingTimeMinutes || 0);
@@ -111,7 +112,7 @@ export default function PostForm({ post, mode }: PostFormProps) {
         };
 
         try {
-            const url = mode === 'create' ? '/api/posts' : `/api/posts/${post.id}`;
+            const url = mode === 'create' ? '/api/posts' : `/api/posts/${post?.id}`;
             const method = mode === 'create' ? 'POST' : 'PUT';
 
             const res = await fetch(url, {
