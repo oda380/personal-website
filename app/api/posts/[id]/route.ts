@@ -1,16 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { getPostById, updatePost, deletePost } from '@/lib/db';
+import { requireAdmin } from '@/lib/admin-auth';
 
 type Params = Promise<{ id: string }>;
 
-// GET /api/posts/[id] - Get single post
+// GET /api/posts/[id] - Get single post (admin required because it may be a draft)
 export async function GET(
     request: NextRequest,
     props: { params: Params }
 ) {
     const params = await props.params;
     try {
+        const admin = await requireAdmin();
+
+        if (!admin.authorized) {
+            return NextResponse.json(
+                { error: admin.error },
+                { status: admin.status }
+            );
+        }
+
         const id = parseInt(params.id);
         const post = await getPostById(id);
 
@@ -30,19 +39,19 @@ export async function GET(
     }
 }
 
-// PUT /api/posts/[id] - Update post (auth required)
+// PUT /api/posts/[id] - Update post (admin required)
 export async function PUT(
     request: NextRequest,
     props: { params: Params }
 ) {
     const params = await props.params;
     try {
-        const { userId } = await auth();
+        const admin = await requireAdmin();
 
-        if (!userId) {
+        if (!admin.authorized) {
             return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
+                { error: admin.error },
+                { status: admin.status }
             );
         }
 
@@ -60,19 +69,19 @@ export async function PUT(
     }
 }
 
-// DELETE /api/posts/[id] - Delete post (auth required)
+// DELETE /api/posts/[id] - Delete post (admin required)
 export async function DELETE(
     request: NextRequest,
     props: { params: Params }
 ) {
     const params = await props.params;
     try {
-        const { userId } = await auth();
+        const admin = await requireAdmin();
 
-        if (!userId) {
+        if (!admin.authorized) {
             return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
+                { error: admin.error },
+                { status: admin.status }
             );
         }
 

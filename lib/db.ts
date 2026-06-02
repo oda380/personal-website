@@ -1,6 +1,44 @@
 import { sql } from '@vercel/postgres';
 import { Project, Post } from './types';
 
+type DbRow = Record<string, unknown>;
+
+function mapProject(row: DbRow): Project {
+    return {
+        id: row.id as number,
+        title: row.title as string,
+        slug: row.slug as string,
+        oneLiner: row.one_liner as string,
+        role: row.role as string,
+        timeframe: row.timeframe as string,
+        stack: row.stack as string[],
+        summary: row.summary as string,
+        highlights: row.highlights as string[],
+        link: row.link as string | undefined,
+        type: row.type as Project['type'],
+        displayOrder: row.display_order as number,
+    };
+}
+
+function mapPost(row: DbRow): Post {
+    const oneLiner = row.one_liner as string;
+
+    return {
+        id: row.id as number,
+        title: row.title as string,
+        slug: row.slug as string,
+        status: row.status as Post['status'],
+        excerpt: (row.excerpt as string | null) || oneLiner,
+        content: row.content as string | undefined,
+        featuredImageUrl: row.featured_image_url as string | undefined,
+        readingTimeMinutes: row.reading_time_minutes as number | undefined,
+        oneLiner,
+        tags: row.tags as string[],
+        lastUpdated: row.last_updated as string,
+        keyIdea: row.key_idea as string,
+    };
+}
+
 // ============================================================================
 // PROJECTS
 // ============================================================================
@@ -11,20 +49,7 @@ export async function getProjects(): Promise<Project[]> {
     ORDER BY display_order ASC, created_at DESC
   `;
 
-    return rows.map(row => ({
-        id: row.id,
-        title: row.title,
-        slug: row.slug,
-        oneLiner: row.one_liner,
-        role: row.role,
-        timeframe: row.timeframe,
-        stack: row.stack as string[],
-        summary: row.summary,
-        highlights: row.highlights as string[],
-        link: row.link,
-        type: row.type,
-        displayOrder: row.display_order,
-    })) as Project[];
+    return rows.map(mapProject);
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
@@ -37,12 +62,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     if (rows.length === 0) return null;
 
     const row = rows[0];
-    return {
-        ...row,
-        stack: row.stack as string[],
-        highlights: row.highlights as string[],
-        displayOrder: row.display_order,
-    } as Project;
+    return mapProject(row);
 }
 
 export async function getProjectById(id: number): Promise<Project | null> {
@@ -55,20 +75,7 @@ export async function getProjectById(id: number): Promise<Project | null> {
     if (rows.length === 0) return null;
 
     const row = rows[0];
-    return {
-        id: row.id,
-        title: row.title,
-        slug: row.slug,
-        oneLiner: row.one_liner,
-        role: row.role,
-        timeframe: row.timeframe,
-        stack: row.stack as string[],
-        summary: row.summary,
-        highlights: row.highlights as string[],
-        link: row.link,
-        type: row.type,
-        displayOrder: row.display_order,
-    } as Project;
+    return mapProject(row);
 }
 
 export async function createProject(project: Omit<Project, 'id'>): Promise<Project> {
@@ -94,12 +101,7 @@ export async function createProject(project: Omit<Project, 'id'>): Promise<Proje
   `;
 
     const row = rows[0];
-    return {
-        ...row,
-        stack: row.stack as string[],
-        highlights: row.highlights as string[],
-        displayOrder: row.display_order,
-    } as Project;
+    return mapProject(row);
 }
 
 export async function updateProject(id: number, project: Partial<Omit<Project, 'id'>>): Promise<Project> {
@@ -165,12 +167,7 @@ export async function updateProject(id: number, project: Partial<Omit<Project, '
     const { rows } = await sql.query(query, values);
 
     const row = rows[0];
-    return {
-        ...row,
-        stack: row.stack as string[],
-        highlights: row.highlights as string[],
-        displayOrder: row.display_order,
-    } as Project;
+    return mapProject(row);
 }
 
 export async function deleteProject(id: number): Promise<void> {
@@ -187,20 +184,7 @@ export async function getPosts(): Promise<Post[]> {
     ORDER BY created_at DESC
   `;
 
-    return rows.map(row => ({
-        id: row.id,
-        title: row.title,
-        slug: row.slug,
-        status: row.status,
-        excerpt: row.excerpt || row.one_liner,
-        content: row.content,
-        featuredImageUrl: row.featured_image_url,
-        readingTimeMinutes: row.reading_time_minutes,
-        oneLiner: row.one_liner,
-        tags: row.tags as string[],
-        lastUpdated: row.last_updated,
-        keyIdea: row.key_idea,
-    })) as Post[];
+    return rows.map(mapPost);
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
@@ -213,20 +197,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     if (rows.length === 0) return null;
 
     const row = rows[0];
-    return {
-        id: row.id,
-        title: row.title,
-        slug: row.slug,
-        status: row.status,
-        excerpt: row.excerpt || row.one_liner,
-        content: row.content,
-        featuredImageUrl: row.featured_image_url,
-        readingTimeMinutes: row.reading_time_minutes,
-        oneLiner: row.one_liner,
-        tags: row.tags as string[],
-        lastUpdated: row.last_updated,
-        keyIdea: row.key_idea,
-    } as Post;
+    return mapPost(row);
 }
 
 export async function getPostById(id: number): Promise<Post | null> {
@@ -239,20 +210,7 @@ export async function getPostById(id: number): Promise<Post | null> {
     if (rows.length === 0) return null;
 
     const row = rows[0];
-    return {
-        id: row.id,
-        title: row.title,
-        slug: row.slug,
-        status: row.status,
-        excerpt: row.excerpt || row.one_liner,
-        content: row.content,
-        featuredImageUrl: row.featured_image_url,
-        readingTimeMinutes: row.reading_time_minutes,
-        oneLiner: row.one_liner,
-        tags: row.tags as string[],
-        lastUpdated: row.last_updated,
-        keyIdea: row.key_idea,
-    } as Post;
+    return mapPost(row);
 }
 
 export async function createPost(post: Omit<Post, 'id'>): Promise<Post> {
@@ -279,14 +237,7 @@ export async function createPost(post: Omit<Post, 'id'>): Promise<Post> {
   `;
 
     const row = rows[0];
-    return {
-        ...row,
-        tags: row.tags as string[],
-        excerpt: row.excerpt || row.one_liner,
-        content: row.content,
-        featuredImageUrl: row.featured_image_url,
-        readingTimeMinutes: row.reading_time_minutes,
-    } as Post;
+    return mapPost(row);
 }
 
 export async function updatePost(id: number, post: Partial<Omit<Post, 'id'>>): Promise<Post> {
@@ -352,10 +303,7 @@ export async function updatePost(id: number, post: Partial<Omit<Post, 'id'>>): P
     const { rows } = await sql.query(query, values);
 
     const row = rows[0];
-    return {
-        ...row,
-        tags: row.tags as string[],
-    } as Post;
+    return mapPost(row);
 }
 
 export async function deletePost(id: number): Promise<void> {
@@ -398,20 +346,7 @@ export async function getPublishedPosts(
 
     const { rows } = await query;
 
-    return rows.map(row => ({
-        id: row.id,
-        title: row.title,
-        slug: row.slug,
-        status: row.status,
-        excerpt: row.excerpt || row.one_liner,
-        content: row.content,
-        featuredImageUrl: row.featured_image_url,
-        readingTimeMinutes: row.reading_time_minutes,
-        oneLiner: row.one_liner,
-        tags: row.tags as string[],
-        lastUpdated: row.last_updated,
-        keyIdea: row.key_idea,
-    })) as Post[];
+    return rows.map(mapPost);
 }
 
 // Get count of published posts (with optional search filter)
@@ -440,4 +375,3 @@ export async function getPublishedPostsCount(search?: string): Promise<number> {
     const { rows } = await query;
     return parseInt(rows[0].count);
 }
-

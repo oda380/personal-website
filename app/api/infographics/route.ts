@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import {
     getInfographics,
     createInfographic,
 } from '@/lib/infographics';
+import { requireAdmin } from '@/lib/admin-auth';
 
 // GET /api/infographics - Get all infographics
 export async function GET(request: NextRequest) {
@@ -28,9 +28,9 @@ export async function GET(request: NextRequest) {
 
 // POST /api/infographics - Create new infographic
 export async function POST(request: NextRequest) {
-    const { userId } = await auth();
-    if (!userId) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const admin = await requireAdmin();
+    if (!admin.authorized) {
+        return NextResponse.json({ error: admin.error }, { status: admin.status });
     }
 
     try {

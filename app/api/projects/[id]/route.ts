@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { auth } from '@clerk/nextjs/server';
 import { getProjectById, updateProject, deleteProject } from '@/lib/db';
+import { requireAdmin } from '@/lib/admin-auth';
 
 type Params = Promise<{ id: string }>;
 
@@ -32,19 +32,19 @@ export async function GET(
     }
 }
 
-// PUT /api/projects/[id] - Update project (auth required)
+// PUT /api/projects/[id] - Update project (admin required)
 export async function PUT(
     request: NextRequest,
     props: { params: Params }
 ) {
     const params = await props.params;
     try {
-        const { userId } = await auth();
+        const admin = await requireAdmin();
 
-        if (!userId) {
+        if (!admin.authorized) {
             return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
+                { error: admin.error },
+                { status: admin.status }
             );
         }
 
@@ -65,19 +65,19 @@ export async function PUT(
     }
 }
 
-// DELETE /api/projects/[id] - Delete project (auth required)
+// DELETE /api/projects/[id] - Delete project (admin required)
 export async function DELETE(
     request: NextRequest,
     props: { params: Params }
 ) {
     const params = await props.params;
     try {
-        const { userId } = await auth();
+        const admin = await requireAdmin();
 
-        if (!userId) {
+        if (!admin.authorized) {
             return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
+                { error: admin.error },
+                { status: admin.status }
             );
         }
 

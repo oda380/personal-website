@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { getPosts, createPost } from '@/lib/db';
+import { requireAdmin } from '@/lib/admin-auth';
 
-// GET /api/posts - List all posts
+// GET /api/posts - List all posts (admin required because it includes drafts)
 export async function GET() {
     try {
+        const admin = await requireAdmin();
+
+        if (!admin.authorized) {
+            return NextResponse.json(
+                { error: admin.error },
+                { status: admin.status }
+            );
+        }
+
         const posts = await getPosts();
         return NextResponse.json(posts);
     } catch (error) {
@@ -16,15 +25,15 @@ export async function GET() {
     }
 }
 
-// POST /api/posts - Create new post (auth required)
+// POST /api/posts - Create new post (admin required)
 export async function POST(request: NextRequest) {
     try {
-        const { userId } = await auth();
+        const admin = await requireAdmin();
 
-        if (!userId) {
+        if (!admin.authorized) {
             return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
+                { error: admin.error },
+                { status: admin.status }
             );
         }
 

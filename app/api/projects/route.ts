@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { auth } from '@clerk/nextjs/server';
 import { getProjects, createProject } from '@/lib/db';
+import { requireAdmin } from '@/lib/admin-auth';
 
 // GET /api/projects - List all projects
 export async function GET() {
@@ -17,15 +17,15 @@ export async function GET() {
     }
 }
 
-// POST /api/projects - Create new project (auth required)
+// POST /api/projects - Create new project (admin required)
 export async function POST(request: NextRequest) {
     try {
-        const { userId } = await auth();
+        const admin = await requireAdmin();
 
-        if (!userId) {
+        if (!admin.authorized) {
             return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
+                { error: admin.error },
+                { status: admin.status }
             );
         }
 

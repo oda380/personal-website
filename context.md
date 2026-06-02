@@ -4,11 +4,11 @@
 
 ## 1. Project Overview
 
-This is a personal portfolio and blog website built with **Next.js 14 (App Router)**. Unlike a static site, it features a fully dynamic **Admin Dashboard** powered by a **Postgres database** and **Clerk authentication**, allowing the owner to manage content and site settings directly from the browser.
+This is a personal portfolio and blog website built with **Next.js 16 (App Router)**. Unlike a static site, it features a fully dynamic **Admin Dashboard** powered by a **Postgres database** and **Clerk authentication**, allowing the owner to manage content, daily crypto infographics, and site settings directly from the browser.
 
 ## 2. Tech Stack
 
-- **Framework:** Next.js 14 (App Router, Server Components by default)
+- **Framework:** Next.js 16 (App Router, Server Components by default)
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS (with `framer-motion` for animations)
 - **Database:** Vercel Postgres (Neon)
@@ -31,8 +31,9 @@ This is a personal portfolio and blog website built with **Next.js 14 (App Route
 - **Protected Routes**: Middleware ensures only authenticated admins can access `/admin`.
 - **CRUD Operations**:
   - **Projects**: Create, Edit, Delete projects (rich fields: stack, highlights, etc.).
-  - **Posts**: Create, Edit, Delete blog posts.
-  - **Settings**: Manage global links (GitHub, Twitter) and "About" content.
+- **Posts**: Create, Edit, Delete blog posts.
+- **Daily Crypto**: Create, Edit, Delete dated infographic posts uploaded through Pinata/IPFS.
+- **Settings**: Manage global links (GitHub, Twitter) and "About" content.
 - **Inline Actions**: Admin-only "Edit" and "Delete" buttons appear on public pages when signed in.
 
 ## 4. Database Schema (Vercel Postgres)
@@ -52,6 +53,7 @@ This is a personal portfolio and blog website built with **Next.js 14 (App Route
 | `highlights` | JSONB | Array of bullet points |
 | `link` | TEXT | External URL |
 | `type` | TEXT | e.g. "Product", "Experiment" |
+| `display_order` | INTEGER | Lower numbers sort first |
 
 ### `posts` Table
 
@@ -73,6 +75,15 @@ This is a personal portfolio and blog website built with **Next.js 14 (App Route
 | `key` | TEXT | Unique setting key (e.g. 'github_url') |
 | `value` | TEXT | Setting value |
 
+### `infographics` Table
+
+| Column | Type | Description |
+| :--- | :--- | :--- |
+| `id` | SERIAL | Primary Key |
+| `date_posted` | DATE | Unique infographic date |
+| `image_url` | TEXT | Public image URL |
+| `pinata_cid` | TEXT | Optional Pinata/IPFS CID |
+
 ## 5. Development Workflow
 
 ### Setup
@@ -83,7 +94,7 @@ This is a personal portfolio and blog website built with **Next.js 14 (App Route
 
 ### Database Management
 
-- **Migrations**: Scripts in `/scripts` folder (e.g., `scripts/migrate.ts`, `scripts/create-settings-table.ts`).
+- **Migrations**: `schema.sql` plus setup scripts in `/scripts` (e.g., `scripts/create-settings-table.ts`, `scripts/create-infographics-table.ts`).
 - **Running Scripts**: `npx dotenv -e .env.local -- npx tsx scripts/script-name.ts`
 
 ### Deployment (Vercel)

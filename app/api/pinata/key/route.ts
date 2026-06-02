@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
+import { requireAdmin } from '@/lib/admin-auth';
 
 export async function POST() {
     try {
-        // Check authentication
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        const admin = await requireAdmin();
+        if (!admin.authorized) {
+            return NextResponse.json({ error: admin.error }, { status: admin.status });
         }
 
         // Generate a temporary API key

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { getSettings, updateSettings } from '@/lib/db-settings';
+import { requireAdmin } from '@/lib/admin-auth';
 
 // GET /api/settings - Get all settings
 export async function GET() {
@@ -16,15 +16,15 @@ export async function GET() {
     }
 }
 
-// PUT /api/settings - Update settings (auth required)
+// PUT /api/settings - Update settings (admin required)
 export async function PUT(request: NextRequest) {
     try {
-        const { userId } = await auth();
+        const admin = await requireAdmin();
 
-        if (!userId) {
+        if (!admin.authorized) {
             return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
+                { error: admin.error },
+                { status: admin.status }
             );
         }
 

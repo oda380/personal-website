@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import {
     getInfographicById,
     updateInfographic,
     deleteInfographic,
 } from '@/lib/infographics';
+import { requireAdmin } from '@/lib/admin-auth';
 
 // GET /api/infographics/[id] - Get single infographic
 export async function GET(
@@ -31,9 +31,9 @@ export async function PUT(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
-    const { userId } = await auth();
-    if (!userId) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const admin = await requireAdmin();
+    if (!admin.authorized) {
+        return NextResponse.json({ error: admin.error }, { status: admin.status });
     }
 
     try {
@@ -53,9 +53,9 @@ export async function DELETE(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
-    const { userId } = await auth();
-    if (!userId) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const admin = await requireAdmin();
+    if (!admin.authorized) {
+        return NextResponse.json({ error: admin.error }, { status: admin.status });
     }
 
     try {

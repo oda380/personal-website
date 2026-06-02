@@ -1,6 +1,6 @@
 # Personal Portfolio & Admin Dashboard
 
-A premium, high-performance personal website built with Next.js 14, featuring a fully functional admin dashboard for managing projects, writing, and site settings.
+A premium, high-performance personal website built with Next.js 16, featuring a fully functional admin dashboard for managing projects, writing, daily crypto infographics, and site settings.
 
 ![Project Preview](/public/window.svg)
 
@@ -24,7 +24,7 @@ A premium, high-performance personal website built with Next.js 14, featuring a 
 
 ### ⚡ Tech Stack
 
-- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Database**: [Vercel Postgres](https://vercel.com/postgres) (Neon)
 - **Auth**: [Clerk](https://clerk.com/)
@@ -36,7 +36,7 @@ A premium, high-performance personal website built with Next.js 14, featuring a 
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/yourusername/personal-website.git
+git clone https://github.com/oda380/personal-website.git
 cd personal-website
 npm install
 ```
@@ -63,21 +63,34 @@ POSTGRES_USER=default
 POSTGRES_HOST=...
 POSTGRES_PASSWORD=...
 POSTGRES_DATABASE=verceldb
+
+# Optional admin restriction
+ADMIN_EMAIL=you@example.com
+
+# Optional Daily Crypto image uploads
+PINATA_API_JWT=...
+NEXT_PUBLIC_PINATA_GATEWAY_URL=https://gateway.pinata.cloud
 ```
 
 ### 3. Database Initialization
 
-Run the setup scripts to create tables and seed default data:
+Run the schema and setup scripts to create tables and seed default data:
 
 ```bash
+# Create Projects, Posts, Settings, and Infographics Tables
+psql "$POSTGRES_URL" -f schema.sql
+
 # Create Settings Table
 npx dotenv -e .env.local -- npx tsx scripts/create-settings-table.ts
+
+# Create Infographics Table
+npx dotenv -e .env.local -- npx tsx scripts/create-infographics-table.ts
 
 # Add Profile Image Support
 npx dotenv -e .env.local -- npx tsx scripts/add-profile-image.ts
 
-# (Optional) Migrate existing data
-npx dotenv -e .env.local -- npx tsx scripts/migrate.ts
+# Add Home Page Skills
+npx dotenv -e .env.local -- npx tsx scripts/update-settings-skills.ts
 ```
 
 ### 4. Run Locally

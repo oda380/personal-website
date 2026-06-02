@@ -6,6 +6,8 @@ import { getProjects } from '@/lib/db';
 import { ProjectsList } from '@/components/ProjectsList';
 import { PageHeader } from '@/components/PageHeader';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ProjectsPage() {
     const projects = await getProjects();
     return (
