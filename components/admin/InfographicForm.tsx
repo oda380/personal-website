@@ -7,6 +7,9 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
 import { Upload, Loader2 } from 'lucide-react';
 
+const fieldClassName = 'w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))]/70 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]';
+const labelClassName = 'operator-label mb-2 block text-[hsl(var(--muted-foreground))]';
+
 interface InfographicFormProps {
     initialData?: {
         id?: number;
@@ -127,23 +130,23 @@ export function InfographicForm({ initialData, mode }: InfographicFormProps) {
         <form onSubmit={handleSubmit} className="space-y-6">
             {/* Date Picker */}
             <div>
-                <label className="block text-sm font-medium mb-2">Date Posted</label>
+                <label className={labelClassName}>Date Posted</label>
                 <input
                     type="date"
                     value={datePosted}
                     onChange={(e) => setDatePosted(e.target.value)}
                     required
-                    className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    className={fieldClassName}
                 />
-                <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">
+                <p className="mono-meta mt-2 text-[hsl(var(--muted-foreground))]">
                     Date when this crypto news was published
                 </p>
             </div>
 
             {/* File Upload */}
             <div>
-                <label className="block text-sm font-medium mb-2">Infographic Image</label>
-                <div className="border-2 border-dashed border-[hsl(var(--border))] rounded-lg p-8 text-center">
+                <label className={labelClassName}>Infographic Image</label>
+                <div className="rounded-lg border border-dashed border-[hsl(var(--primary))]/35 bg-[hsl(var(--muted))]/25 p-8 text-center">
                     <input
                         type="file"
                         accept="image/*"
@@ -154,7 +157,7 @@ export function InfographicForm({ initialData, mode }: InfographicFormProps) {
                     />
                     <label
                         htmlFor="file-upload"
-                        className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-[hsl(var(--primary))] text-white rounded-lg hover:bg-[hsl(var(--primary))]/90 transition-colors disabled:opacity-50"
+                        className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-4 py-2 font-medium text-[hsl(var(--primary-foreground))] transition-colors hover:bg-[hsl(var(--primary))]/90 disabled:opacity-50"
                     >
                         {uploading ? (
                             <>
@@ -168,7 +171,7 @@ export function InfographicForm({ initialData, mode }: InfographicFormProps) {
                             </>
                         )}
                     </label>
-                    <p className="text-xs text-[hsl(var(--muted-foreground))] mt-2">
+                    <p className="mono-meta mt-3 text-[hsl(var(--muted-foreground))]">
                         PNG or JPEG, max 10MB
                     </p>
                 </div>
@@ -177,8 +180,8 @@ export function InfographicForm({ initialData, mode }: InfographicFormProps) {
             {/* Image Preview */}
             {imageUrl && (
                 <div>
-                    <label className="block text-sm font-medium mb-2">Preview</label>
-                    <div className="border border-[hsl(var(--border))] rounded-lg overflow-hidden bg-[hsl(var(--muted))]/30">
+                    <label className={labelClassName}>Preview</label>
+                    <div className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/30">
                         <Image
                             src={imageUrl}
                             alt="Preview"
@@ -188,7 +191,7 @@ export function InfographicForm({ initialData, mode }: InfographicFormProps) {
                         />
                     </div>
                     {pinataCid && (
-                        <p className="text-xs text-[hsl(var(--muted-foreground))] mt-2">
+                        <p className="mono-meta mt-2 break-all text-[hsl(var(--muted-foreground))]">
                             CID: {pinataCid}
                         </p>
                     )}
@@ -196,7 +199,7 @@ export function InfographicForm({ initialData, mode }: InfographicFormProps) {
             )}
 
             {/* Actions */}
-            <div className="flex gap-4">
+            <div className="flex gap-4 border-t border-[hsl(var(--border))] pt-4">
                 <Button
                     type="button"
                     variant="outline"

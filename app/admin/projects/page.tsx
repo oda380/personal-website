@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import { getProjects } from '@/lib/db';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import ProjectsTable from '@/components/admin/ProjectsTable';
+import { Button } from '@/components/ui/Button';
+import { Plus } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,16 +11,20 @@ export default async function ProjectsManagementPage() {
     const projects = await getProjects();
 
     return (
-        <div className="p-8">
-            <div className="flex justify-between items-center mb-8">
-                <h1 className="text-3xl font-bold">Projects</h1>
-                <Link
-                    href="/admin/projects/new"
-                    className="px-6 py-3 bg-[hsl(var(--primary))] text-white rounded-lg hover:bg-[hsl(var(--primary))]/90 transition-colors"
-                >
-                    Create Project
-                </Link>
-            </div>
+        <div>
+            <AdminPageHeader
+                eyebrow="Case Study Registry"
+                title="Projects"
+                description="Keep production work, experiments, and operational proof points ordered for the public portfolio."
+                action={
+                    <Link href="/admin/projects/new">
+                        <Button variant="primary" className="gap-2">
+                            <Plus className="h-4 w-4" />
+                            Create Project
+                        </Button>
+                    </Link>
+                }
+            />
 
             <ProjectsTable projects={projects} />
         </div>

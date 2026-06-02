@@ -25,8 +25,11 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
 
     if (projects.length === 0) {
         return (
-            <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl p-12 text-center text-[hsl(var(--muted-foreground))]">
-                No projects yet. Create your first one!
+            <div className="operator-panel border-dashed p-12 text-center">
+                <p className="operator-label mb-2">No Records</p>
+                <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                    No projects yet. Create your first one.
+                </p>
             </div>
         );
     }
@@ -34,31 +37,32 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
     return (
         <>
             {/* Desktop Table - Hidden on mobile */}
-            <div className="hidden md:block bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl overflow-hidden">
+            <div className="operator-panel hidden overflow-hidden md:block">
                 <table className="w-full">
-                    <thead className="bg-[hsl(var(--muted))] border-b border-[hsl(var(--border))]">
+                    <thead className="border-b border-[hsl(var(--border))] bg-[hsl(var(--muted))]/45">
                         <tr>
-                            <th className="text-left p-4 font-semibold">Title</th>
-                            <th className="text-left p-4 font-semibold">Type</th>
-                            <th className="text-left p-4 font-semibold">Timeframe</th>
-                            <th className="text-right p-4 font-semibold">Actions</th>
+                            <th className="mono-meta p-4 text-left font-semibold text-[hsl(var(--muted-foreground))]">Title</th>
+                            <th className="mono-meta p-4 text-left font-semibold text-[hsl(var(--muted-foreground))]">Type</th>
+                            <th className="mono-meta p-4 text-left font-semibold text-[hsl(var(--muted-foreground))]">Timeframe</th>
+                            <th className="mono-meta p-4 text-right font-semibold text-[hsl(var(--muted-foreground))]">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {projects.map((project) => (
-                            <tr key={project.id} className="border-b border-[hsl(var(--border))] last:border-0">
+                            <tr key={project.id} className="border-b border-[hsl(var(--border))] transition-colors last:border-0 hover:bg-[hsl(var(--muted))]/30">
                                 <td className="p-4">
                                     <div>
                                         <p className="font-medium">{project.title}</p>
-                                        <p className="text-sm text-[hsl(var(--muted-foreground))]">{project.oneLiner}</p>
+                                        <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">{project.oneLiner}</p>
                                     </div>
                                 </td>
                                 <td className="p-4">
-                                    <span className="text-xs px-2 py-1 rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]">
+                                    <span className="signal-chip text-[hsl(var(--primary))]">
+                                        <span className="signal-dot" />
                                         {project.type}
                                     </span>
                                 </td>
-                                <td className="p-4 text-[hsl(var(--muted-foreground))]">{project.timeframe}</td>
+                                <td className="mono-meta p-4 text-[hsl(var(--muted-foreground))]">{project.timeframe}</td>
                                 <td className="p-4 text-right">
                                     <div className="flex items-center justify-end gap-2">
                                         <Link href={`/admin/projects/${project.id}/edit`}>
@@ -89,7 +93,7 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
                 {projects.map((project) => (
                     <div
                         key={project.id}
-                        className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl p-4"
+                        className="operator-panel p-4"
                     >
                         {/* Title & Description */}
                         <div className="mb-3">
@@ -99,10 +103,11 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
 
                         {/* Meta Row */}
                         <div className="flex items-center justify-between mb-4 pb-4 border-b border-[hsl(var(--border))]">
-                            <span className="text-xs px-2 py-1 rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]">
+                            <span className="signal-chip text-[hsl(var(--primary))]">
+                                <span className="signal-dot" />
                                 {project.type}
                             </span>
-                            <span className="text-sm text-[hsl(var(--muted-foreground))]">{project.timeframe}</span>
+                            <span className="mono-meta text-[hsl(var(--muted-foreground))]">{project.timeframe}</span>
                         </div>
 
                         {/* Action Buttons */}
@@ -129,4 +134,3 @@ export default function ProjectsTable({ projects }: { projects: Project[] }) {
         </>
     );
 }
-

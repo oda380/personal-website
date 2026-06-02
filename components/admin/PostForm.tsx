@@ -35,6 +35,10 @@ const postSchema = z.object({
 
 type PostFormData = z.infer<typeof postSchema>;
 
+const fieldClassName = 'w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))]/70 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]';
+const labelClassName = 'operator-label mb-2 block text-[hsl(var(--muted-foreground))]';
+const removeButtonClassName = 'rounded-lg border border-red-500/20 px-4 py-2 text-sm text-red-500 transition-colors hover:bg-red-500/10 hover:text-red-600';
+
 interface PostFormProps {
     post?: Post | null;
     mode: 'create' | 'edit';
@@ -137,41 +141,41 @@ export default function PostForm({ post, mode }: PostFormProps) {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
-                <label className="block text-sm font-medium mb-2">Title</label>
+                <label className={labelClassName}>Title</label>
                 <input
                     {...register('title')}
-                    className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    className={fieldClassName}
                     placeholder="Your blog post title..."
                 />
                 {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Slug</label>
+                <label className={labelClassName}>Slug</label>
                 <input
                     {...register('slug')}
-                    className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    className={fieldClassName}
                     placeholder="url-friendly-slug"
                 />
                 {errors.slug && <p className="text-red-500 text-sm mt-1">{errors.slug.message}</p>}
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Excerpt</label>
+                <label className={labelClassName}>Excerpt</label>
                 <input
                     {...register('excerpt')}
-                    className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    className={fieldClassName}
                     placeholder="A short description that appears on the blog listing..."
                 />
                 {errors.excerpt && <p className="text-red-500 text-sm mt-1">{errors.excerpt.message}</p>}
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Featured Image URL</label>
+                <label className={labelClassName}>Featured Image URL</label>
                 <input
                     {...register('featuredImageUrl')}
                     type="url"
-                    className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    className={fieldClassName}
                     placeholder="https://example.com/image.jpg"
                 />
                 {errors.featuredImageUrl && <p className="text-red-500 text-sm mt-1">{errors.featuredImageUrl.message}</p>}
@@ -179,10 +183,10 @@ export default function PostForm({ post, mode }: PostFormProps) {
 
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-sm font-medium mb-2">Status</label>
+                    <label className={labelClassName}>Status</label>
                     <select
                         {...register('status')}
-                        className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                        className={fieldClassName}
                     >
                         <option value="planned">Planned</option>
                         <option value="draft">Draft</option>
@@ -191,30 +195,30 @@ export default function PostForm({ post, mode }: PostFormProps) {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2">Last Updated</label>
+                    <label className={labelClassName}>Last Updated</label>
                     <input
                         type="date"
                         {...register('lastUpdated')}
-                        className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                        className={fieldClassName}
                     />
                     {errors.lastUpdated && <p className="text-red-500 text-sm mt-1">{errors.lastUpdated.message}</p>}
                 </div>
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Tags</label>
+                <label className={labelClassName}>Tags</label>
                 <div className="space-y-2">
                     {tagFields.map((field, index) => (
                         <div key={field.id} className="flex gap-2">
                             <input
                                 {...register(`tags.${index}.value` as const)}
                                 placeholder="e.g., web3"
-                                className="flex-1 px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                                className={`${fieldClassName} flex-1`}
                             />
                             <button
                                 type="button"
                                 onClick={() => removeTag(index)}
-                                className="px-4 py-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                                className={removeButtonClassName}
                             >
                                 Remove
                             </button>
@@ -224,7 +228,7 @@ export default function PostForm({ post, mode }: PostFormProps) {
                 <button
                     type="button"
                     onClick={() => appendTag({ value: '' })}
-                    className="mt-2 text-sm text-[hsl(var(--primary))] hover:underline"
+                    className="mono-meta mt-3 text-[hsl(var(--primary))] hover:underline"
                 >
                     + Add Tag
                 </button>
@@ -232,20 +236,20 @@ export default function PostForm({ post, mode }: PostFormProps) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Key Idea</label>
+                <label className={labelClassName}>Key Idea</label>
                 <textarea
                     {...register('keyIdea')}
                     rows={3}
                     placeholder="The main takeaway or insight from this post..."
-                    className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    className={fieldClassName}
                 />
                 {errors.keyIdea && <p className="text-red-500 text-sm mt-1">{errors.keyIdea.message}</p>}
             </div>
 
             <div>
                 <div className="flex items-center justify-between mb-2">
-                    <label className="block text-sm font-medium">Content (Markdown)</label>
-                    <span className="text-sm text-[hsl(var(--muted-foreground))]">
+                    <label className="operator-label block text-[hsl(var(--muted-foreground))]">Content (Markdown)</label>
+                    <span className="signal-chip">
                         ~{readingTime} min read
                     </span>
                 </div>
@@ -256,7 +260,7 @@ export default function PostForm({ post, mode }: PostFormProps) {
                             onChange={(val) => setMarkdownContent(val || '')}
                             height={500}
                             preview="live"
-                            className="rounded-lg border border-[hsl(var(--border))] overflow-hidden"
+                            className="overflow-hidden rounded-lg border border-[hsl(var(--border))]"
                         />
                     </div>
                 )}
@@ -269,14 +273,14 @@ export default function PostForm({ post, mode }: PostFormProps) {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-6 py-3 bg-[hsl(var(--primary))] text-white rounded-lg hover:bg-[hsl(var(--primary))]/90 disabled:opacity-50 transition-colors"
+                    className="rounded-lg bg-[hsl(var(--primary))] px-6 py-3 font-medium text-[hsl(var(--primary-foreground))] transition-colors hover:bg-[hsl(var(--primary))]/90 disabled:opacity-50"
                 >
                     {isSubmitting ? 'Saving...' : mode === 'create' ? 'Create Post' : 'Update Post'}
                 </button>
                 <button
                     type="button"
                     onClick={() => router.back()}
-                    className="px-6 py-3 border border-[hsl(var(--border))] rounded-lg hover:bg-[hsl(var(--muted))] transition-colors"
+                    className="rounded-lg border border-[hsl(var(--border))] px-6 py-3 transition-colors hover:bg-[hsl(var(--muted))]"
                 >
                     Cancel
                 </button>

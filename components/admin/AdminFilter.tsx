@@ -47,11 +47,11 @@ export default function AdminFilter() {
 
     return (
         <div className="flex items-center gap-2">
-            <span className="text-sm text-[hsl(var(--muted-foreground))]">Filter by:</span>
+            <span className="mono-meta text-[hsl(var(--muted-foreground))]">FILTER</span>
             <select
                 value={selectedMonth}
                 onChange={(e) => handleFilterChange(e.target.value)}
-                className="px-3 py-1.5 rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] text-sm focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))]/80 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
             >
                 <option value="all">All Time</option>
                 {availableMonths.map((month) => (

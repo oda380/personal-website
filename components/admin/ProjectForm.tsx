@@ -23,6 +23,10 @@ const projectSchema = z.object({
 
 type ProjectFormData = z.infer<typeof projectSchema>;
 
+const fieldClassName = 'w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))]/70 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]';
+const labelClassName = 'operator-label mb-2 block text-[hsl(var(--muted-foreground))]';
+const removeButtonClassName = 'rounded-lg border border-red-500/20 px-4 py-2 text-sm text-red-500 transition-colors hover:bg-red-500/10 hover:text-red-600';
+
 interface ProjectFormProps {
     project?: Project | null;
     mode: 'create' | 'edit';
@@ -100,66 +104,66 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
-                <label className="block text-sm font-medium mb-2">Title</label>
+                <label className={labelClassName}>Title</label>
                 <input
                     {...register('title')}
-                    className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    className={fieldClassName}
                 />
                 {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Slug</label>
+                <label className={labelClassName}>Slug</label>
                 <input
                     {...register('slug')}
-                    className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    className={fieldClassName}
                 />
                 {errors.slug && <p className="text-red-500 text-sm mt-1">{errors.slug.message}</p>}
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">One-Liner</label>
+                <label className={labelClassName}>One-Liner</label>
                 <input
                     {...register('oneLiner')}
-                    className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    className={fieldClassName}
                 />
                 {errors.oneLiner && <p className="text-red-500 text-sm mt-1">{errors.oneLiner.message}</p>}
             </div>
 
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-sm font-medium mb-2">Role</label>
+                    <label className={labelClassName}>Role</label>
                     <input
                         {...register('role')}
-                        className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                        className={fieldClassName}
                     />
                     {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>}
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2">Timeframe</label>
+                    <label className={labelClassName}>Timeframe</label>
                     <input
                         {...register('timeframe')}
-                        className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                        className={fieldClassName}
                     />
                     {errors.timeframe && <p className="text-red-500 text-sm mt-1">{errors.timeframe.message}</p>}
                 </div>
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Tech Stack</label>
+                <label className={labelClassName}>Tech Stack</label>
                 <div className="space-y-2">
                     {stackFields.map((field, index) => (
                         <div key={field.id} className="flex gap-2">
                             <input
                                 {...register(`stack.${index}.value` as const)}
                                 placeholder="e.g., Next.js"
-                                className="flex-1 px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                                className={`${fieldClassName} flex-1`}
                             />
                             <button
                                 type="button"
                                 onClick={() => removeStack(index)}
-                                className="px-4 py-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                                className={removeButtonClassName}
                             >
                                 Remove
                             </button>
@@ -169,7 +173,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
                 <button
                     type="button"
                     onClick={() => appendStack({ value: '' })}
-                    className="mt-2 text-sm text-[hsl(var(--primary))] hover:underline"
+                    className="mono-meta mt-3 text-[hsl(var(--primary))] hover:underline"
                 >
                     + Add Technology
                 </button>
@@ -177,29 +181,29 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Summary</label>
+                <label className={labelClassName}>Summary</label>
                 <textarea
                     {...register('summary')}
                     rows={4}
-                    className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                    className={fieldClassName}
                 />
                 {errors.summary && <p className="text-red-500 text-sm mt-1">{errors.summary.message}</p>}
             </div>
 
             <div>
-                <label className="block text-sm font-medium mb-2">Highlights</label>
+                <label className={labelClassName}>Highlights</label>
                 <div className="space-y-2">
                     {highlightFields.map((field, index) => (
                         <div key={field.id} className="flex gap-2">
                             <input
                                 {...register(`highlights.${index}.value` as const)}
                                 placeholder="Key achievement or feature"
-                                className="flex-1 px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                                className={`${fieldClassName} flex-1`}
                             />
                             <button
                                 type="button"
                                 onClick={() => removeHighlight(index)}
-                                className="px-4 py-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                                className={removeButtonClassName}
                             >
                                 Remove
                             </button>
@@ -209,7 +213,7 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
                 <button
                     type="button"
                     onClick={() => appendHighlight({ value: '' })}
-                    className="mt-2 text-sm text-[hsl(var(--primary))] hover:underline"
+                    className="mono-meta mt-3 text-[hsl(var(--primary))] hover:underline"
                 >
                     + Add Highlight
                 </button>
@@ -218,10 +222,10 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="md:col-span-1">
-                    <label className="block text-sm font-medium mb-2">Type</label>
+                    <label className={labelClassName}>Type</label>
                     <select
                         {...register('type')}
-                        className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                        className={fieldClassName}
                     >
                         <option value="web3">Web3</option>
                         <option value="web2">Web2</option>
@@ -231,21 +235,21 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
                 </div>
 
                 <div className="md:col-span-1">
-                    <label className="block text-sm font-medium mb-2">Display Order</label>
+                    <label className={labelClassName}>Display Order</label>
                     <input
                         type="number"
                         {...register('displayOrder', { valueAsNumber: true })}
-                        className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                        className={fieldClassName}
                     />
                     <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">Lower numbers appear first</p>
                 </div>
 
                 <div className="md:col-span-1">
-                    <label className="block text-sm font-medium mb-2">Link (Optional)</label>
+                    <label className={labelClassName}>Link (Optional)</label>
                     <input
                         {...register('link')}
                         placeholder="https://github.com/..."
-                        className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                        className={fieldClassName}
                     />
                 </div>
             </div>
@@ -254,14 +258,14 @@ export default function ProjectForm({ project, mode }: ProjectFormProps) {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-6 py-3 bg-[hsl(var(--primary))] text-white rounded-lg hover:bg-[hsl(var(--primary))]/90 disabled:opacity-50 transition-colors"
+                    className="rounded-lg bg-[hsl(var(--primary))] px-6 py-3 font-medium text-[hsl(var(--primary-foreground))] transition-colors hover:bg-[hsl(var(--primary))]/90 disabled:opacity-50"
                 >
                     {isSubmitting ? 'Saving...' : mode === 'create' ? 'Create Project' : 'Update Project'}
                 </button>
                 <button
                     type="button"
                     onClick={() => router.back()}
-                    className="px-6 py-3 border border-[hsl(var(--border))] rounded-lg hover:bg-[hsl(var(--muted))] transition-colors"
+                    className="rounded-lg border border-[hsl(var(--border))] px-6 py-3 transition-colors hover:bg-[hsl(var(--muted))]"
                 >
                     Cancel
                 </button>

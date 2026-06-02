@@ -7,6 +7,12 @@ import { Button } from '@/components/ui/Button';
 import { Pencil, Trash2 } from 'lucide-react';
 
 export default function PostsTable({ posts }: { posts: Post[] }) {
+    const statusClassName = (status: Post['status']) => {
+        if (status === 'published') return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-500';
+        if (status === 'draft') return 'border-amber-500/30 bg-amber-500/10 text-amber-500';
+        return 'border-[hsl(var(--border))] bg-[hsl(var(--muted))]/60 text-[hsl(var(--muted-foreground))]';
+    };
+
     const handleDelete = async (id: number, title: string) => {
         if (confirm(`Are you sure you want to delete "${title}"?`)) {
             try {
@@ -25,8 +31,11 @@ export default function PostsTable({ posts }: { posts: Post[] }) {
 
     if (posts.length === 0) {
         return (
-            <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl p-12 text-center text-[hsl(var(--muted-foreground))]">
-                No posts yet. Create your first one!
+            <div className="operator-panel border-dashed p-12 text-center">
+                <p className="operator-label mb-2">No Records</p>
+                <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                    No posts yet. Create your first one.
+                </p>
             </div>
         );
     }
@@ -34,36 +43,31 @@ export default function PostsTable({ posts }: { posts: Post[] }) {
     return (
         <>
             {/* Desktop Table - Hidden on mobile */}
-            <div className="hidden md:block bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl overflow-hidden">
+            <div className="operator-panel hidden overflow-hidden md:block">
                 <table className="w-full">
-                    <thead className="bg-[hsl(var(--muted))] border-b border-[hsl(var(--border))]">
+                    <thead className="border-b border-[hsl(var(--border))] bg-[hsl(var(--muted))]/45">
                         <tr>
-                            <th className="text-left p-4 font-semibold">Title</th>
-                            <th className="text-left p-4 font-semibold">Status</th>
-                            <th className="text-left p-4 font-semibold">Last Updated</th>
-                            <th className="text-right p-4 font-semibold">Actions</th>
+                            <th className="mono-meta p-4 text-left font-semibold text-[hsl(var(--muted-foreground))]">Title</th>
+                            <th className="mono-meta p-4 text-left font-semibold text-[hsl(var(--muted-foreground))]">Status</th>
+                            <th className="mono-meta p-4 text-left font-semibold text-[hsl(var(--muted-foreground))]">Last Updated</th>
+                            <th className="mono-meta p-4 text-right font-semibold text-[hsl(var(--muted-foreground))]">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {posts.map((post) => (
-                            <tr key={post.id} className="border-b border-[hsl(var(--border))] last:border-0">
+                            <tr key={post.id} className="border-b border-[hsl(var(--border))] transition-colors last:border-0 hover:bg-[hsl(var(--muted))]/30">
                                 <td className="p-4">
                                     <div>
                                         <p className="font-medium">{post.title}</p>
-                                        <p className="text-sm text-[hsl(var(--muted-foreground))]">{post.oneLiner}</p>
+                                        <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">{post.oneLiner}</p>
                                     </div>
                                 </td>
                                 <td className="p-4">
-                                    <span className={`text-xs px-2 py-1 rounded-full ${post.status === 'published'
-                                        ? 'bg-emerald-500/10 text-emerald-500'
-                                        : post.status === 'draft'
-                                            ? 'bg-amber-500/10 text-amber-500'
-                                            : 'bg-gray-500/10 text-gray-500'
-                                        }`}>
+                                    <span className={`signal-chip ${statusClassName(post.status)}`}>
                                         {post.status}
                                     </span>
                                 </td>
-                                <td className="p-4 text-[hsl(var(--muted-foreground))]">{post.lastUpdated}</td>
+                                <td className="mono-meta p-4 text-[hsl(var(--muted-foreground))]">{post.lastUpdated}</td>
                                 <td className="p-4 text-right">
                                     <div className="flex items-center justify-end gap-2">
                                         <Link href={`/admin/posts/${post.id}/edit`}>
@@ -94,7 +98,7 @@ export default function PostsTable({ posts }: { posts: Post[] }) {
                 {posts.map((post) => (
                     <div
                         key={post.id}
-                        className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl p-4"
+                        className="operator-panel p-4"
                     >
                         {/* Title & Description */}
                         <div className="mb-3">
@@ -104,15 +108,10 @@ export default function PostsTable({ posts }: { posts: Post[] }) {
 
                         {/* Meta Row */}
                         <div className="flex items-center justify-between mb-4 pb-4 border-b border-[hsl(var(--border))]">
-                            <span className={`text-xs px-2 py-1 rounded-full ${post.status === 'published'
-                                ? 'bg-emerald-500/10 text-emerald-500'
-                                : post.status === 'draft'
-                                    ? 'bg-amber-500/10 text-amber-500'
-                                    : 'bg-gray-500/10 text-gray-500'
-                                }`}>
+                            <span className={`signal-chip ${statusClassName(post.status)}`}>
                                 {post.status}
                             </span>
-                            <span className="text-sm text-[hsl(var(--muted-foreground))]">{post.lastUpdated}</span>
+                            <span className="mono-meta text-[hsl(var(--muted-foreground))]">{post.lastUpdated}</span>
                         </div>
 
                         {/* Action Buttons */}
@@ -139,4 +138,3 @@ export default function PostsTable({ posts }: { posts: Post[] }) {
         </>
     );
 }
-

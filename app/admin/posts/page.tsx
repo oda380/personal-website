@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import { getPosts } from '@/lib/db';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import PostsTable from '@/components/admin/PostsTable';
+import { Button } from '@/components/ui/Button';
+import { Plus } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,16 +11,20 @@ export default async function PostsManagementPage() {
     const posts = await getPosts();
 
     return (
-        <div className="p-8">
-            <div className="flex justify-between items-center mb-8">
-                <h1 className="text-3xl font-bold">Posts</h1>
-                <Link
-                    href="/admin/posts/new"
-                    className="px-6 py-3 bg-[hsl(var(--primary))] text-white rounded-lg hover:bg-[hsl(var(--primary))]/90 transition-colors"
-                >
-                    Create Post
-                </Link>
-            </div>
+        <div>
+            <AdminPageHeader
+                eyebrow="Writing Pipeline"
+                title="Posts"
+                description="Manage notes, drafts, and published writing with clear status and revision dates."
+                action={
+                    <Link href="/admin/posts/new">
+                        <Button variant="primary" className="gap-2">
+                            <Plus className="h-4 w-4" />
+                            Create Post
+                        </Button>
+                    </Link>
+                }
+            />
 
             <PostsTable posts={posts} />
         </div>

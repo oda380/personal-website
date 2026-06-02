@@ -25,7 +25,7 @@ export default function AdminShell({
     ];
 
     return (
-        <div className="flex min-h-screen">
+        <div className="flex min-h-screen bg-[hsl(var(--background))]">
             {/* Mobile Sidebar Overlay */}
             <AnimatePresence>
                 {isSidebarOpen && (
@@ -43,38 +43,40 @@ export default function AdminShell({
             <aside
                 className={`
                     fixed md:sticky top-0 left-0 z-50 h-screen w-64 
-                    border-r border-[hsl(var(--border))]/50 
-                    bg-gradient-to-b from-[hsl(var(--card))] to-[hsl(var(--card))]/95
+                    border-r border-[hsl(var(--border))] 
+                    bg-[hsl(var(--background))]/95
                     backdrop-blur-xl
-                    shadow-xl
                     transition-transform duration-300 ease-in-out
                     ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
                 `}
             >
                 <div className="flex flex-col h-full relative">
-                    {/* Subtle gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--primary))]/5 via-transparent to-[hsl(var(--secondary))]/5 pointer-events-none" />
+                    <div className="absolute inset-x-0 top-0 h-px bg-[hsl(var(--primary))]/45" />
 
                     {/* Header */}
-                    <div className="relative p-6 flex items-center justify-between">
+                    <div className="relative flex items-center justify-between p-5">
                         <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center shadow-lg">
-                                <LayoutDashboard className="w-4 h-4 text-white" />
+                            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/12">
+                                <LayoutDashboard className="h-4 w-4 text-[hsl(var(--primary))]" />
                             </div>
-                            <h2 className="text-lg font-bold bg-gradient-to-r from-[hsl(var(--foreground))] to-[hsl(var(--foreground))]/70 bg-clip-text text-transparent">
-                                Admin
-                            </h2>
+                            <div>
+                                <p className="mono-meta text-[hsl(var(--primary))]">ADMIN SURFACE</p>
+                                <h2 className="text-base font-semibold text-[hsl(var(--foreground))]">
+                                    Control Room
+                                </h2>
+                            </div>
                         </div>
                         <button
                             onClick={() => setIsSidebarOpen(false)}
-                            className="md:hidden p-1.5 hover:bg-[hsl(var(--muted))] rounded-lg transition-all duration-200 hover:scale-110"
+                            className="rounded-lg p-1.5 transition-colors hover:bg-[hsl(var(--muted))] md:hidden"
+                            aria-label="Close admin navigation"
                         >
                             <X className="w-5 h-5" />
                         </button>
                     </div>
 
                     {/* Navigation */}
-                    <nav className="relative flex-1 px-3 space-y-1">
+                    <nav className="relative flex-1 space-y-1 px-3">
                         {links.map((link) => {
                             const Icon = link.icon;
                             const isActive = pathname === link.href;
@@ -84,11 +86,11 @@ export default function AdminShell({
                                     href={link.href}
                                     onClick={() => setIsSidebarOpen(false)}
                                     className={`
-                                        group relative flex items-center gap-3 px-3 py-2.5 rounded-xl 
-                                        transition-all duration-300 ease-out
+                                        group relative flex items-center gap-3 rounded-lg px-3 py-2.5 
+                                        transition-colors duration-200
                                         ${isActive
-                                            ? 'bg-gradient-to-r from-[hsl(var(--primary))]/15 to-[hsl(var(--primary))]/5 text-[hsl(var(--primary))] font-medium shadow-lg shadow-[hsl(var(--primary))]/10'
-                                            : 'text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]/50 hover:text-[hsl(var(--foreground))] hover:translate-x-1'
+                                            ? 'border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]'
+                                            : 'border border-transparent text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--border))] hover:bg-[hsl(var(--muted))]/45 hover:text-[hsl(var(--foreground))]'
                                         }
                                     `}
                                 >
@@ -96,45 +98,45 @@ export default function AdminShell({
                                     {isActive && (
                                         <motion.div
                                             layoutId="activeTab"
-                                            className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--primary))]/10 to-transparent rounded-xl"
+                                            className="absolute inset-y-2 left-0 w-1 rounded-r-full bg-[hsl(var(--primary))]"
                                             transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                                         />
                                     )}
 
                                     <div className={`
-                                        relative z-10 p-1.5 rounded-lg transition-all duration-300
+                                        relative z-10 rounded-md p-1.5 transition-colors duration-200
                                         ${isActive
                                             ? 'bg-[hsl(var(--primary))]/10'
                                             : 'bg-[hsl(var(--muted))]/30 group-hover:bg-[hsl(var(--muted))]'
                                         }
                                     `}>
-                                        <Icon className={`w-4 h-4 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
+                                        <Icon className="h-4 w-4" />
                                     </div>
-                                    <span className="relative z-10 text-sm tracking-wide">{link.label}</span>
+                                    <span className="relative z-10 text-sm font-medium">{link.label}</span>
                                 </Link>
                             );
                         })}
 
                         {/* Back to Website */}
-                        <div className="pt-6 mt-6 border-t border-[hsl(var(--border))]/50">
+                        <div className="mt-6 border-t border-[hsl(var(--border))] pt-6">
                             <Link
                                 href="/"
-                                className="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]/50 hover:text-[hsl(var(--foreground))] transition-all duration-300 hover:translate-x-1"
+                                className="group flex items-center gap-3 rounded-lg border border-transparent px-3 py-2.5 text-[hsl(var(--muted-foreground))] transition-colors hover:border-[hsl(var(--border))] hover:bg-[hsl(var(--muted))]/45 hover:text-[hsl(var(--foreground))]"
                             >
-                                <div className="p-1.5 rounded-lg bg-[hsl(var(--muted))]/30 group-hover:bg-[hsl(var(--muted))] transition-all duration-300">
-                                    <ArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
+                                <div className="rounded-md bg-[hsl(var(--muted))]/30 p-1.5 transition-colors group-hover:bg-[hsl(var(--muted))]">
+                                    <ArrowLeft className="h-4 w-4" />
                                 </div>
-                                <span className="text-sm tracking-wide">Back to Website</span>
+                                <span className="text-sm font-medium">Back to Public Site</span>
                             </Link>
                         </div>
                     </nav>
 
                     {/* Profile Section */}
-                    <div className="relative p-4 border-t border-[hsl(var(--border))]/50">
-                        <div className="flex items-center justify-between px-2 py-2 rounded-xl bg-[hsl(var(--muted))]/20 backdrop-blur-sm">
+                    <div className="relative border-t border-[hsl(var(--border))] p-4">
+                        <div className="operator-panel flex items-center justify-between px-3 py-2">
                             <div className="flex items-center gap-3">
                                 <UserButton afterSignOutUrl="/" />
-                                <span className="text-sm font-medium text-[hsl(var(--foreground))]/80">Admin User</span>
+                                <span className="text-sm font-medium text-[hsl(var(--foreground))]/80">Admin</span>
                             </div>
                             <ThemeToggle />
                         </div>
@@ -145,14 +147,15 @@ export default function AdminShell({
             {/* Main content */}
             <main className="flex-1 flex flex-col min-w-0">
                 {/* Mobile Header */}
-                <div className="md:hidden h-16 border-b border-[hsl(var(--border))] flex items-center px-4 bg-[hsl(var(--background))] sticky top-0 z-30">
+                <div className="sticky top-0 z-30 flex h-16 items-center border-b border-[hsl(var(--border))] bg-[hsl(var(--background))]/95 px-4 backdrop-blur md:hidden">
                     <button
                         onClick={() => setIsSidebarOpen(true)}
-                        className="p-2 -ml-2 hover:bg-[hsl(var(--muted))] rounded-lg"
+                        className="-ml-2 rounded-lg p-2 hover:bg-[hsl(var(--muted))]"
+                        aria-label="Open admin navigation"
                     >
                         <Menu className="w-6 h-6" />
                     </button>
-                    <span className="ml-4 font-semibold">Dashboard</span>
+                    <span className="ml-4 font-semibold">Control Room</span>
                 </div>
 
                 <div className="flex-1 overflow-auto p-4 md:p-8">

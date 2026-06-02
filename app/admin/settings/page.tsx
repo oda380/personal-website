@@ -3,7 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import { Skeleton } from '@/components/ui/Skeleton';
+
+const fieldClassName = 'w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))]/70 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]';
+const labelClassName = 'operator-label mb-2 block text-[hsl(var(--muted-foreground))]';
 
 export default function SettingsPage() {
     const router = useRouter();
@@ -62,9 +66,9 @@ export default function SettingsPage() {
 
     if (isLoading) {
         return (
-            <div className="p-8 max-w-2xl">
-                <Skeleton className="h-10 w-48 mb-8" />
-                <div className="space-y-6">
+            <div className="max-w-3xl">
+                <Skeleton className="mb-8 h-24 w-full" />
+                <div className="operator-panel space-y-6 p-6">
                     {[1, 2, 3, 4].map((i) => (
                         <div key={i}>
                             <Skeleton className="h-5 w-24 mb-2" />
@@ -81,76 +85,83 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="p-8 max-w-2xl">
-            <h1 className="text-3xl font-bold mb-8">Settings</h1>
+        <div className="max-w-3xl">
+            <AdminPageHeader
+                eyebrow="Site Configuration"
+                title="Settings"
+                description="Update profile links, about copy, and homepage skill modules that feed the public site."
+            />
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="operator-panel space-y-6 p-5 md:p-6">
                 <div>
-                    <label className="block text-sm font-medium mb-2">GitHub URL</label>
+                    <label className={labelClassName}>GitHub URL</label>
                     <input
                         type="url"
                         value={settings.github_url}
                         onChange={(e) => setSettings({ ...settings, github_url: e.target.value })}
                         placeholder="https://github.com/yourusername"
-                        className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                        className={fieldClassName}
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2">Twitter URL</label>
+                    <label className={labelClassName}>Twitter URL</label>
                     <input
                         type="url"
                         value={settings.twitter_url}
                         onChange={(e) => setSettings({ ...settings, twitter_url: e.target.value })}
                         placeholder="https://twitter.com/yourusername"
-                        className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                        className={fieldClassName}
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2">LinkedIn URL</label>
+                    <label className={labelClassName}>LinkedIn URL</label>
                     <input
                         type="url"
                         value={settings.linkedin_url}
                         onChange={(e) => setSettings({ ...settings, linkedin_url: e.target.value })}
                         placeholder="https://linkedin.com/in/yourusername"
-                        className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                        className={fieldClassName}
                     />
                 </div>
 
                 <div>
                     <div>
-                        <label className="block text-sm font-medium mb-2">Email</label>
+                        <label className={labelClassName}>Email</label>
                         <input
                             type="email"
                             value={settings.email}
                             onChange={(e) => setSettings({ ...settings, email: e.target.value })}
                             placeholder="your.email@example.com"
-                            className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                            className={fieldClassName}
                         />
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium mb-2">About Page Content</label>
+                    <div className="mt-6">
+                        <label className={labelClassName}>About Page Content</label>
                         <textarea
                             value={settings.about_content || ''}
                             onChange={(e) => setSettings({ ...settings, about_content: e.target.value })}
                             rows={8}
                             placeholder="Write about yourself... (Use double line breaks for paragraphs)"
-                            className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]"
+                            className={fieldClassName}
                         />
-                        <p className="text-xs text-[hsl(var(--muted-foreground))] mt-1">
+                        <p className="mono-meta mt-2 text-[hsl(var(--muted-foreground))]">
                             Tip: You can also edit this directly on the /about page when signed in
                         </p>
                     </div>
 
                     <div className="pt-8 border-t border-[hsl(var(--border))]">
-                        <h2 className="text-xl font-bold mb-4">Home Page Skills</h2>
+                        <div className="mb-4">
+                            <p className="operator-label">Home Modules</p>
+                            <h2 className="mt-2 text-xl font-semibold">Home Page Skills</h2>
+                        </div>
                         <div className="space-y-6">
                             {settings.home_skills?.map((skill, index) => (
-                                <div key={index} className="p-4 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--card))]">
+                                <div key={index} className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/25 p-4">
                                     <div className="flex justify-between items-start mb-4">
-                                        <h3 className="font-medium">Skill #{index + 1}</h3>
+                                        <h3 className="mono-meta text-[hsl(var(--primary))]">Skill #{index + 1}</h3>
                                         <button
                                             type="button"
                                             onClick={() => {
@@ -166,7 +177,7 @@ export default function SettingsPage() {
 
                                     <div className="space-y-4">
                                         <div>
-                                            <label className="block text-sm font-medium mb-2">Title</label>
+                                            <label className={labelClassName}>Title</label>
                                             <input
                                                 type="text"
                                                 value={skill.title}
@@ -175,11 +186,11 @@ export default function SettingsPage() {
                                                     newSkills[index].title = e.target.value;
                                                     setSettings({ ...settings, home_skills: newSkills });
                                                 }}
-                                                className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--background))]"
+                                                className={fieldClassName}
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium mb-2">Description</label>
+                                            <label className={labelClassName}>Description</label>
                                             <textarea
                                                 value={skill.description}
                                                 onChange={(e) => {
@@ -188,11 +199,11 @@ export default function SettingsPage() {
                                                     setSettings({ ...settings, home_skills: newSkills });
                                                 }}
                                                 rows={3}
-                                                className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--background))]"
+                                                className={fieldClassName}
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium mb-2">Icon</label>
+                                            <label className={labelClassName}>Icon</label>
                                             <select
                                                 value={skill.iconName}
                                                 onChange={(e) => {
@@ -200,7 +211,7 @@ export default function SettingsPage() {
                                                     newSkills[index].iconName = e.target.value;
                                                     setSettings({ ...settings, home_skills: newSkills });
                                                 }}
-                                                className="w-full px-4 py-2 border border-[hsl(var(--border))] rounded-lg bg-[hsl(var(--background))]"
+                                                className={fieldClassName}
                                             >
                                                 <option value="product">Product (Lightning/Zap)</option>
                                                 <option value="code">Code (Brackets)</option>
@@ -222,7 +233,7 @@ export default function SettingsPage() {
                                         ]
                                     });
                                 }}
-                                className="w-full py-3 border-2 border-dashed border-[hsl(var(--border))] rounded-lg text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--primary))] hover:text-[hsl(var(--primary))] transition-colors"
+                                className="w-full rounded-lg border border-dashed border-[hsl(var(--primary))]/35 py-3 text-sm font-medium text-[hsl(var(--muted-foreground))] transition-colors hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]"
                             >
                                 + Add Skill
                             </button>
@@ -234,7 +245,7 @@ export default function SettingsPage() {
                     <button
                         type="submit"
                         disabled={isSaving}
-                        className="px-6 py-3 bg-[hsl(var(--primary))] text-white rounded-lg hover:bg-[hsl(var(--primary))]/90 disabled:opacity-50 transition-colors"
+                    className="rounded-lg bg-[hsl(var(--primary))] px-6 py-3 font-medium text-[hsl(var(--primary-foreground))] transition-colors hover:bg-[hsl(var(--primary))]/90 disabled:opacity-50"
                     >
                         {isSaving ? 'Saving...' : 'Save Settings'}
                     </button>

@@ -24,7 +24,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
     if (totalPages <= 1) return null;
 
     return (
-        <div className="flex items-center justify-center gap-4 mt-8">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Button
                 variant="outline"
                 size="sm"
@@ -36,7 +36,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
                 Previous
             </Button>
 
-            <span className="text-sm text-[hsl(var(--muted-foreground))]">
+            <span className="signal-chip">
                 Page <span className="font-medium text-[hsl(var(--foreground))]">{currentPage}</span> of{' '}
                 <span className="font-medium text-[hsl(var(--foreground))]">{totalPages}</span>
             </span>

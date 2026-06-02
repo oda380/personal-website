@@ -1,3 +1,4 @@
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import PostForm from '@/components/admin/PostForm';
 import { getPostById } from '@/lib/db';
 
@@ -8,9 +9,15 @@ export default async function EditPostPage(props: { params: Params }) {
     const post = await getPostById(parseInt(params.id));
 
     return (
-        <div className="p-8 max-w-4xl">
-            <h1 className="text-3xl font-bold mb-8">Edit Post</h1>
-            <PostForm post={post} mode="edit" />
+        <div className="max-w-5xl">
+            <AdminPageHeader
+                eyebrow="Writing Editor"
+                title="Edit Post"
+                description="Refine the public note, update metadata, or move it through the publishing pipeline."
+            />
+            <div className="operator-panel p-5 md:p-6">
+                <PostForm post={post} mode="edit" />
+            </div>
         </div>
     );
 }
