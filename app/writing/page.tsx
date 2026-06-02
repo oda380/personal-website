@@ -32,9 +32,9 @@ export default async function WritingPage({ searchParams }: PageProps) {
     return (
         <div className="flex-1">
             <PageHeader
-                title="Writing"
-                subtitle="Thoughts & Insights"
-                description="Thoughts on Web3 product, development, and building useful things"
+                title="Operator Notes"
+                subtitle="Signal Log"
+                description="Notes on Web3 product, payments, on-chain data, and the practical constraints that decide whether something survives production."
                 action={
                     <SignedIn>
                         <Link href="/admin/posts/new">
@@ -50,7 +50,7 @@ export default async function WritingPage({ searchParams }: PageProps) {
             <div className="max-w-4xl mx-auto px-6 py-16">
                 {/* Search Bar */}
                 <div className="mb-12">
-                    <SearchInput placeholder="Search posts by title, content, or tags..." />
+                    <SearchInput placeholder="Search by product, chain, wallet, data, or constraint..." />
                 </div>
 
                 {/* Search Results Info */}
@@ -76,4 +76,3 @@ export default async function WritingPage({ searchParams }: PageProps) {
         </div>
     );
 }
-

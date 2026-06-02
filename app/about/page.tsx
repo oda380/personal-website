@@ -15,6 +15,13 @@ interface Settings {
     profile_image_url?: string;
 }
 
+const principles = [
+    'Useful beats impressive.',
+    'The demo is not the system.',
+    'A wallet address is not a person.',
+    'Measure first, automate second.',
+];
+
 export default function AboutPage() {
     const [settings, setSettings] = useState<Settings>({
         about_content: '',
@@ -108,7 +115,7 @@ export default function AboutPage() {
                 <div className="grid md:grid-cols-[320px_1fr] gap-12 items-start">
                     {/* Left Column: Profile Card */}
                     <div className="md:sticky md:top-24 space-y-8">
-                        <div className="aspect-square rounded-2xl bg-gradient-to-br from-[hsl(var(--primary))]/20 via-[hsl(var(--secondary))]/15 to-[hsl(var(--primary))]/5 border border-[hsl(var(--border))] flex items-center justify-center shadow-sm overflow-hidden relative">
+                        <div className="aspect-square rounded-lg operator-panel flex items-center justify-center overflow-hidden relative">
                             {settings.profile_image_url ? (
                                 // eslint-disable-next-line @next/next/no-img-element
                                 <img
@@ -117,18 +124,22 @@ export default function AboutPage() {
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
-                                <span className="text-6xl font-bold text-[hsl(var(--primary))]/40 select-none">KL</span>
+                                <div className="text-center">
+                                    <span className="text-6xl font-bold text-[hsl(var(--primary))]/70 select-none">KL</span>
+                                    <p className="mono-meta text-[hsl(var(--muted-foreground))] mt-3">CONTROL ROOM</p>
+                                </div>
                             )}
                         </div>
 
 
                         <div className="space-y-4">
                             <div>
+                                <p className="operator-label mb-3">About</p>
                                 <motion.h1
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.5 }}
-                                    className="text-3xl font-bold tracking-tight mb-2"
+                                    className="text-3xl font-bold mb-2"
                                 >
                                     Kitaek Lim
                                 </motion.h1>
@@ -138,16 +149,7 @@ export default function AboutPage() {
                                     transition={{ delay: 0.2, duration: 0.5 }}
                                     className="text-lg text-[hsl(var(--muted-foreground))]"
                                 >
-                                    <span className="relative inline-block">
-                                        Product Builder
-                                        <motion.span
-                                            initial={{ width: 0 }}
-                                            animate={{ width: '100%' }}
-                                            transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
-                                            className="absolute bottom-1 left-0 h-2 bg-[hsl(var(--primary))]/20 -z-10 -rotate-1"
-                                        />
-                                    </span>
-                                    {' '}& Web3 Enthusiast
+                                    Web3 product operator for payments, wallet flows, and on-chain data.
                                 </motion.div>
                             </div>
 
@@ -173,6 +175,16 @@ export default function AboutPage() {
                                     </a>
                                 )}
                             </div>
+                        </div>
+
+                        <div className="operator-panel p-5 space-y-3">
+                            <p className="operator-label">Operator Strip</p>
+                            {['Product Ops', 'Wallet Flows', 'On-chain Data', 'Internal Tools'].map((item) => (
+                                <div key={item} className="flex items-center gap-3 text-sm text-[hsl(var(--muted-foreground))]">
+                                    <span className="signal-dot" />
+                                    <span>{item}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
@@ -241,22 +253,54 @@ export default function AboutPage() {
                                 </div>
                             ) : (
                                 <div className="prose prose-lg dark:prose-invert max-w-none">
+                                    <div className="mb-10">
+                                        <p className="operator-label mb-3">Working Thesis</p>
+                                        <h2 className="text-4xl font-bold text-[hsl(var(--foreground))] mb-4">
+                                            Control room, not hype machine.
+                                        </h2>
+                                        <p className="text-xl text-[hsl(var(--muted-foreground))] leading-relaxed">
+                                            I work between product, engineering, payments, and operations to make messy Web3 systems visible, usable, and measurable.
+                                        </p>
+                                    </div>
                                     {settings.about_content.split('\n\n').map((paragraph, idx) => (
                                         <p key={idx} className="text-[hsl(var(--foreground))] leading-relaxed mb-6">
                                             {paragraph}
                                         </p>
                                     ))}
+                                    <div className="not-prose grid sm:grid-cols-2 gap-3 mt-10">
+                                        {principles.map((principle) => (
+                                            <div key={principle} className="operator-panel p-4">
+                                                <p className="text-sm font-medium text-[hsl(var(--foreground))]">{principle}</p>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             )}
                         </SignedIn>
 
                         <SignedOut>
                             <div className="prose prose-lg dark:prose-invert max-w-none">
+                                <div className="mb-10">
+                                    <p className="operator-label mb-3">Working Thesis</p>
+                                    <h2 className="text-4xl font-bold text-[hsl(var(--foreground))] mb-4">
+                                        Control room, not hype machine.
+                                    </h2>
+                                    <p className="text-xl text-[hsl(var(--muted-foreground))] leading-relaxed">
+                                        I work between product, engineering, payments, and operations to make messy Web3 systems visible, usable, and measurable.
+                                    </p>
+                                </div>
                                 {settings.about_content.split('\n\n').map((paragraph, idx) => (
                                     <p key={idx} className="text-[hsl(var(--foreground))] leading-relaxed mb-6">
                                         {paragraph}
                                     </p>
                                 ))}
+                                <div className="not-prose grid sm:grid-cols-2 gap-3 mt-10">
+                                    {principles.map((principle) => (
+                                        <div key={principle} className="operator-panel p-4">
+                                            <p className="text-sm font-medium text-[hsl(var(--foreground))]">{principle}</p>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </SignedOut>
                     </div>

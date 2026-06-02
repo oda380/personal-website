@@ -14,25 +14,25 @@ export function PageHeader({ title, subtitle, description, maxWidth = 'max-w-2xl
     return (
         <section className="border-b border-[hsl(var(--border))] relative overflow-hidden">
             <div className="max-w-4xl mx-auto px-6 py-20 relative z-10">
-                <div className="flex justify-between items-start mb-6">
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-5xl sm:text-6xl font-bold tracking-tight"
-                    >
-                        {title}
-                        <br />
-                        <span className="text-[hsl(var(--primary))] relative inline-block">
+                <div className="flex flex-col gap-6 sm:flex-row sm:justify-between sm:items-start mb-6">
+                    <div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4 }}
+                            className="operator-label mb-4"
+                        >
                             {subtitle}
-                            <motion.span
-                                initial={{ width: 0 }}
-                                animate={{ width: '100%' }}
-                                transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
-                                className="absolute bottom-2 left-0 h-3 bg-[hsl(var(--primary))]/20 -z-10 -rotate-1"
-                            />
-                        </span>
-                    </motion.h1>
+                        </motion.div>
+                        <motion.h1
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="text-5xl sm:text-6xl font-bold"
+                        >
+                            {title}
+                        </motion.h1>
+                    </div>
                     {action && (
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
@@ -52,6 +52,7 @@ export function PageHeader({ title, subtitle, description, maxWidth = 'max-w-2xl
                 >
                     {description}
                 </motion.p>
+                <div className="signal-rule mt-10" />
             </div>
         </section>
     );

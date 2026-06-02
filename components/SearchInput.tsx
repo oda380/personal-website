@@ -46,7 +46,7 @@ export default function SearchInput({ placeholder = 'Search...' }: { placeholder
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder={placeholder}
-                    className="w-full pl-12 pr-12 py-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]/50 backdrop-blur-sm text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))] focus:border-transparent transition-all"
+                    className="w-full pl-12 pr-12 py-3 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))]/70 backdrop-blur-sm text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))] focus:border-transparent transition-all"
                 />
                 {query && (
                     <button

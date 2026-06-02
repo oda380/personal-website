@@ -40,8 +40,7 @@ export default function PostCard({ post, index, children }: { post: Post; index:
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1, duration: 0.5 }}
-            whileHover={{ y: -2, scale: 1.005 }}
-            className="bg-[hsl(var(--card))]/50 backdrop-blur-sm border border-[hsl(var(--border))] rounded-xl overflow-hidden hover:border-[hsl(var(--primary))]/50 transition-all shadow-sm hover:shadow-lg hover:shadow-[hsl(var(--primary))]/10"
+            className="operator-panel operator-panel-hover overflow-hidden"
         >
             {/* Featured Image */}
             {post.featuredImageUrl && (
@@ -56,22 +55,25 @@ export default function PostCard({ post, index, children }: { post: Post; index:
                 </div>
             )}
 
-            <div className="p-8">
+            <div className="p-6 sm:p-8">
                 {/* Header */}
                 <div className="flex items-start justify-between gap-4 mb-3">
-                    <h2 className="text-2xl font-bold flex-1">{post.title}</h2>
+                    <div className="flex-1">
+                        <p className="mono-meta text-[hsl(var(--primary))] mb-2">OPERATOR NOTE</p>
+                        <h2 className="text-2xl font-bold">{post.title}</h2>
+                    </div>
                     <span className={`text-xs font-medium px-3 py-1.5 rounded-full whitespace-nowrap ${getStatusStyles(post.status)}`}>
                         {post.status}
                     </span>
                 </div>
 
                 {/* Excerpt */}
-                <p className="text-[hsl(var(--muted-foreground))] mb-5 leading-relaxed">
+                <p className="text-[hsl(var(--muted-foreground))] mb-5 leading-relaxed max-w-2xl">
                     {post.excerpt}
                 </p>
 
                 {/* Metadata */}
-                <div className="flex flex-wrap items-center gap-4 mb-5 text-sm text-[hsl(var(--muted-foreground))]">
+                <div className="flex flex-wrap items-center gap-4 mb-5 mono-meta text-[hsl(var(--muted-foreground))]">
                     <span>{post.lastUpdated}</span>
                     {post.readingTimeMinutes && post.readingTimeMinutes > 0 && (
                         <div className="flex items-center gap-1.5">
@@ -87,7 +89,7 @@ export default function PostCard({ post, index, children }: { post: Post; index:
                         {post.tags.map((tag) => (
                             <span
                                 key={tag}
-                                className="text-xs font-medium px-2.5 py-1 rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] border border-[hsl(var(--primary))]/20"
+                                className="text-xs font-medium px-2.5 py-1 rounded-md bg-[hsl(var(--muted))]/70 text-[hsl(var(--muted-foreground))] border border-[hsl(var(--border))]"
                             >
                                 #{tag}
                             </span>

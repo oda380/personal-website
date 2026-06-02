@@ -13,9 +13,9 @@ export default async function ProjectsPage() {
     return (
         <div className="flex-1">
             <PageHeader
-                title="Projects"
-                subtitle="What I've Built"
-                description="Web3 products, developer tools, and experiments"
+                title="Case Studies"
+                subtitle="Signal / Intervention / Outcome"
+                description="Web3 product, payments, wallet, and data work framed around the problem, the constraint, and what changed after shipping."
                 action={
                     <SignedIn>
                         <Link href="/admin/projects/new">

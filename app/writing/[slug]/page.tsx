@@ -71,7 +71,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                     className="inline-flex items-center gap-2 text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors group"
                 >
                     <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-                    Back to Writing
+                    Back to Signal Log
                 </Link>
             </div>
 
@@ -93,6 +93,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
                 {/* Header */}
                 <header className="mb-12">
+                    <p className="operator-label mb-4">Operator Note</p>
                     <h1 className="text-5xl font-bold mb-6 text-balance leading-tight">
                         {post.title}
                     </h1>
@@ -103,7 +104,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                     </p>
 
                     {/* Metadata */}
-                    <div className="flex flex-wrap items-center gap-6 text-sm text-[hsl(var(--muted-foreground))] pb-8 border-b border-[hsl(var(--border))]">
+                    <div className="flex flex-wrap items-center gap-6 mono-meta text-[hsl(var(--muted-foreground))] pb-8 border-b border-[hsl(var(--border))]">
                         <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4" />
                             <time>{post.lastUpdated}</time>
@@ -122,7 +123,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                             {post.tags.map((tag) => (
                                 <span
                                     key={tag}
-                                    className="text-xs font-medium px-3 py-1.5 rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] border border-[hsl(var(--primary))]/20"
+                                    className="text-xs font-medium px-3 py-1.5 rounded-full bg-[hsl(var(--muted))]/70 text-[hsl(var(--muted-foreground))] border border-[hsl(var(--border))]"
                                 >
                                     #{tag}
                                 </span>
@@ -133,8 +134,8 @@ export default async function BlogPostPage({ params }: PageProps) {
 
                 {/* Key Idea Callout */}
                 {post.keyIdea && (
-                    <div className="mb-12 p-6 rounded-xl bg-gradient-to-br from-[hsl(var(--primary))]/10 to-[hsl(var(--secondary))]/10 border border-[hsl(var(--primary))]/20">
-                        <h3 className="text-sm font-semibold uppercase tracking-wider text-[hsl(var(--primary))] mb-3">
+                    <div className="mb-12 operator-panel p-6">
+                        <h3 className="operator-label mb-3">
                             Key Idea
                         </h3>
                         <p className="text-lg italic leading-relaxed text-[hsl(var(--foreground))]">

@@ -34,12 +34,15 @@ export default function Footer() {
     if (pathname?.startsWith('/admin')) return null;
 
     return (
-        <footer className="border-t border-[hsl(var(--border))] bg-[hsl(var(--background))] py-12">
+        <footer className="border-t border-[hsl(var(--border))] bg-[hsl(var(--background))]/92 py-12">
             <div className="max-w-5xl mx-auto px-6">
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm">
-                    <p className="text-[hsl(var(--muted-foreground))]">
-                        © {new Date().getFullYear()} Kitaek Lim
-                    </p>
+                    <div className="text-center sm:text-left">
+                        <p className="font-medium">Kitaek Lim</p>
+                        <p className="mono-meta text-[hsl(var(--muted-foreground))]">
+                            Useful beats impressive / {new Date().getFullYear()}
+                        </p>
+                    </div>
 
                     <div className="flex gap-6">
                         {settings.github_url && (

@@ -14,9 +14,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                     'inline-flex items-center justify-center font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none rounded-lg',
                     {
                         // Variants
-                        'bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary))]/90 shadow-lg shadow-[hsl(var(--primary))]/20':
+                        'bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] hover:bg-[hsl(var(--primary))]/90 shadow-lg shadow-[hsl(var(--primary))]/16':
                             variant === 'primary',
-                        'border border-[hsl(var(--border))] hover:bg-[hsl(var(--muted))] bg-[hsl(var(--card))]/50 backdrop-blur-sm':
+                        'border border-[hsl(var(--border))] hover:border-[hsl(var(--primary))]/45 hover:bg-[hsl(var(--muted))] bg-[hsl(var(--card))]/70 backdrop-blur-sm':
                             variant === 'outline',
                         'hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))]':
                             variant === 'ghost',

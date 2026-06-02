@@ -1,39 +1,10 @@
-'use client';
-
-import { motion } from 'framer-motion';
-
 export default function BackgroundGradient() {
     return (
         <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-            <motion.div
-                animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.3, 0.5, 0.3],
-                    x: [0, 100, 0],
-                    y: [0, -50, 0],
-                }}
-                transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "linear"
-                }}
-                className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[hsl(var(--primary))] blur-[100px] opacity-30 will-change-transform transform-gpu"
-            />
-            <motion.div
-                animate={{
-                    scale: [1, 1.1, 1],
-                    opacity: [0.2, 0.4, 0.2],
-                    x: [0, -50, 0],
-                    y: [0, 100, 0],
-                }}
-                transition={{
-                    duration: 25,
-                    repeat: Infinity,
-                    ease: "linear",
-                    delay: 2
-                }}
-                className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-blue-500 blur-[120px] opacity-20 will-change-transform transform-gpu"
-            />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.28)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.22)_1px,transparent_1px)] bg-[size:72px_72px] opacity-[0.18]" />
+            <div className="absolute inset-0 bg-[linear-gradient(120deg,hsl(var(--primary)/0.10),transparent_28%,transparent_72%,hsl(var(--secondary)/0.08))]" />
+            <div className="absolute left-0 right-0 top-0 h-40 bg-gradient-to-b from-[hsl(var(--primary))]/8 to-transparent" />
+            <div className="absolute inset-x-0 top-1/3 h-px bg-[linear-gradient(to_right,transparent,hsl(var(--primary)/0.26),transparent)]" />
         </div>
     );
 }

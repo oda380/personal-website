@@ -77,16 +77,20 @@ export default function Navigation() {
     if (pathname?.startsWith('/admin')) return null;
 
     return (
-        <nav className="sticky top-0 z-40 w-full border-b border-[hsl(var(--border))] bg-[hsl(var(--background))]/80 backdrop-blur-md">
+        <nav className="sticky top-0 z-40 w-full border-b border-[hsl(var(--border))] bg-[hsl(var(--background))]/86 backdrop-blur-md">
             <div className="max-w-5xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
-                <Link href="/" className="hover:opacity-80 transition-opacity z-50 relative">
+                <Link href="/" className="hover:opacity-90 transition-opacity z-50 relative flex items-center gap-3">
                     <NextImage
                         src="/logo.jpg"
                         alt="Logo"
                         width={32}
                         height={32}
-                        className="rounded-lg"
+                        className="rounded-md border border-[hsl(var(--border))]"
                     />
+                    <span className="hidden sm:flex flex-col leading-none">
+                        <span className="text-sm font-semibold">Kitaek Lim</span>
+                        <span className="mono-meta text-[hsl(var(--muted-foreground))]">WEB3 OPERATOR</span>
+                    </span>
                 </Link>
 
                 {/* Desktop Navigation */}
@@ -180,7 +184,7 @@ export default function Navigation() {
                                         >
                                             <Link
                                                 href={link.href}
-                                                className="text-4xl font-bold tracking-tight text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors block"
+                                                className="text-4xl font-bold text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors block"
                                                 onClick={() => setIsOpen(false)}
                                             >
                                                 {link.label}
@@ -212,7 +216,7 @@ export default function Navigation() {
                                         <SignedIn>
                                             <div className="flex flex-col gap-6">
                                                 <Link
-                                                    href="/admin"
+                                                href="/admin"
                                                     className="text-xl font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
                                                     onClick={() => setIsOpen(false)}
                                                 >
@@ -233,7 +237,7 @@ export default function Navigation() {
                                     transition={{ delay: 0.5 }}
                                     className="p-8 flex items-center justify-between text-[hsl(var(--muted-foreground))] text-sm"
                                 >
-                                    <span>© {new Date().getFullYear()} Kitaek Lim</span>
+                                    <span className="mono-meta">SIGNAL / {new Date().getFullYear()}</span>
                                     <ThemeToggle />
                                 </motion.div>
                             </motion.div>

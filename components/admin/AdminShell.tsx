@@ -61,7 +61,7 @@ export default function AdminShell({
                             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] flex items-center justify-center shadow-lg">
                                 <LayoutDashboard className="w-4 h-4 text-white" />
                             </div>
-                            <h2 className="text-lg font-bold bg-gradient-to-r from-[hsl(var(--foreground))] to-[hsl(var(--foreground))]/70 bg-clip-text text-transparent tracking-tight">
+                            <h2 className="text-lg font-bold bg-gradient-to-r from-[hsl(var(--foreground))] to-[hsl(var(--foreground))]/70 bg-clip-text text-transparent">
                                 Admin
                             </h2>
                         </div>

@@ -109,19 +109,9 @@ export default function DailyCryptoPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
-                            className="text-5xl sm:text-6xl font-bold tracking-tight"
+                            className="text-5xl sm:text-6xl font-bold"
                         >
                             Daily Crypto
-                            <br />
-                            <span className="text-[hsl(var(--primary))] relative inline-block">
-                                What Happened Today
-                                <motion.span
-                                    initial={{ width: 0 }}
-                                    animate={{ width: '100%' }}
-                                    transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
-                                    className="absolute bottom-2 left-0 h-3 bg-[hsl(var(--primary))]/20 -z-10 -rotate-1"
-                                />
-                            </span>
                         </motion.h1>
 
 
@@ -143,8 +133,13 @@ export default function DailyCryptoPage() {
                         transition={{ delay: 0.2, duration: 0.5 }}
                         className="text-xl text-[hsl(var(--muted-foreground))] leading-relaxed max-w-2xl"
                     >
-                        Your daily dose of Web3 insights—curated crypto news, market movements, and blockchain happenings in one visual snapshot.
+                        A market signal log for crypto news, chain movement, and the operational context behind the noise.
                     </motion.p>
+                    <div className="flex flex-wrap gap-2 mt-8">
+                        <span className="signal-chip mono-meta">MARKET SIGNAL</span>
+                        <span className="signal-chip mono-meta">CHAIN MOVEMENT</span>
+                        <span className="signal-chip mono-meta">OPERATOR NOTES</span>
+                    </div>
                 </div>
             </section>
 
@@ -167,7 +162,7 @@ export default function DailyCryptoPage() {
 
                 <div className="flex items-center justify-between mb-8">
                     <h2 className="text-3xl font-bold flex items-center gap-3">
-                        <span>{selectedMonth === 'all' ? 'Recent Updates' : formatMonthYear(selectedMonth)}</span>
+                        <span>{selectedMonth === 'all' ? 'Recent Signals' : formatMonthYear(selectedMonth)}</span>
                     </h2>
 
                     <div className="flex items-center gap-3">
